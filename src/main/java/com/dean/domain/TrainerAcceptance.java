@@ -1,22 +1,17 @@
 package com.dean.domain;
 
 public class TrainerAcceptance {
-    private String message;
+    private Acceptance acceptance;
 
     private TrainerAcceptance(){}
 
     private TrainerAcceptance(Builder builder){
-        this.message=builder.message;
+        this.acceptance=builder.acceptance;
     }
-    public String getMessage(){return message;}
-
     public static class Builder{
-        private String message;
+        private Acceptance acceptance;
 
-        public Builder message(String message){
-            this.message=message;
-            return this;
-        }
         public TrainerAcceptance build(){return new TrainerAcceptance(this);}
+
     }
 }

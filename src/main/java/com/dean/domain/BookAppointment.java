@@ -1,11 +1,11 @@
 package com.dean.domain;
 
-public class CustomerAppointment {
+public class BookAppointment {
     private String name,surname,title,time;
 
-    private CustomerAppointment(){}
+    private BookAppointment(){}
 
-    private CustomerAppointment(Builder builder){
+    private BookAppointment(Builder builder){
         this.name=builder.name;
         this.surname=builder.surname;
         this.title=builder.title;
@@ -38,7 +38,7 @@ public class CustomerAppointment {
             this.time=time;
             return this;
         }
-        public CustomerAppointment build(){return new CustomerAppointment(this);}
+        public BookAppointment build(){return new BookAppointment(this);}
 
     }
 }
