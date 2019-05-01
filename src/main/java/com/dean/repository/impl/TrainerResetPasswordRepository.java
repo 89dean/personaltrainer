@@ -5,6 +5,6 @@ import com.dean.repository.IRepository;
 
 import java.util.Set;
 
-public interface TrainerResetPasswordRepository extends IRepository {
+public interface TrainerResetPasswordRepository extends IRepository<TrainerResetPassword,String> {
     Set<TrainerResetPassword> getAll();
 }

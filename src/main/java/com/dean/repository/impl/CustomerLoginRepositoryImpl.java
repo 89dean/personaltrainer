@@ -5,7 +5,7 @@ import com.dean.domain.CustomerLogin;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CustomerLoginRepositoryImpl extends CustomerLoginRepository{
+public class CustomerLoginRepositoryImpl implements CustomerLoginRepository{
 
     private static CustomerLoginRepositoryImpl repository = null;
     private Set<CustomerLogin> customerLogin;
@@ -48,11 +48,12 @@ public class CustomerLoginRepositoryImpl extends CustomerLoginRepository{
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(String emailAddress) {
 
     }
 
     public Set<CustomerLogin>getAll(){
+
         return this.customerLogin;
     }
 }

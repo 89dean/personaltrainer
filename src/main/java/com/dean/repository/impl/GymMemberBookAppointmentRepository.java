@@ -5,6 +5,6 @@ import com.dean.repository.IRepository;
 
 import java.util.Set;
 
-public interface GymMemberBookAppointmentRepository extends IRepository {
+public interface GymMemberBookAppointmentRepository extends IRepository<GymMemberBookAppointment,String> {
     Set<GymMemberBookAppointment>getAll();
 }

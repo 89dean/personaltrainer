@@ -5,6 +5,6 @@ import com.dean.repository.IRepository;
 
 import java.util.Set;
 
-public interface TrainerAcceptanceRepository extends IRepository {
+public interface TrainerAcceptanceRepository extends IRepository<TrainerAcceptance,String> {
     Set<TrainerAcceptance> getAll();
 }

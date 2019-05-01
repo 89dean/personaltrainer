@@ -5,6 +5,6 @@ import com.dean.repository.IRepository;
 
 import java.util.Set;
 
-public interface CustomerResetPasswordRepository extends IRepository {
+public interface CustomerResetPasswordRepository extends IRepository<CustomerResetPassword,String> {
     Set<CustomerResetPassword> getAll();
 }

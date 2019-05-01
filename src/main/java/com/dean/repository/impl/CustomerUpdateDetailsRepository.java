@@ -5,6 +5,6 @@ import com.dean.repository.IRepository;
 
 import java.util.Set;
 
-public interface CustomerUpdateDetailsRepository extends IRepository {
+public interface CustomerUpdateDetailsRepository extends IRepository<CustomerUpdateDetails,String> {
     Set<CustomerUpdateDetails> getAll();
 }

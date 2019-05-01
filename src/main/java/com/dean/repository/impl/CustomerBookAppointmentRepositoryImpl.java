@@ -53,6 +53,7 @@ public class CustomerBookAppointmentRepositoryImpl implements CustomerBookAppoin
     }
 
     public Set<CustomerBookAppointment>getAll(){
+
         return this.customerBookAppointment;
     }
 }

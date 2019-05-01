@@ -5,6 +5,6 @@ import com.dean.repository.IRepository;
 
 import java.util.Set;
 
-public interface GymMemberLoginRepository extends IRepository {
+public interface GymMemberLoginRepository extends IRepository<GymMemberLogin,String>{
     Set<GymMemberLogin>getAll();
 }
