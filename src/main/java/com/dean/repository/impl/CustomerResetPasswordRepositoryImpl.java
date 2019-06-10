@@ -2,17 +2,16 @@ package com.dean.repository.impl;
 
 import com.dean.domain.CustomerResetPassword;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CustomerResetPasswordRepositoryImpl implements CustomerResetPasswordRepository{
 
     private static CustomerResetPasswordRepositoryImpl repository = null;
-    private Set<CustomerResetPassword> customerResetPassword;
+    private Map<String,CustomerResetPassword> customerResetPassword;
 
     private CustomerResetPasswordRepositoryImpl(){
 
-        this.customerResetPassword = new HashSet<>();
+        this.customerResetPassword = new HashMap<>();
     }
 
     public static CustomerResetPasswordRepositoryImpl  getRepository(){
@@ -21,41 +20,25 @@ public class CustomerResetPasswordRepositoryImpl implements CustomerResetPasswor
     }
 
     public CustomerResetPassword create(CustomerResetPassword customerResetPassword){
-        this.customerResetPassword.add(customerResetPassword);
+        this.customerResetPassword.put(customerResetPassword.getEmailAddress(),customerResetPassword);
         return customerResetPassword;
     }
-    public void delete(CustomerResetPassword customerResetPassword){
-        this.customerResetPassword.remove(customerResetPassword);
+    public CustomerResetPassword read(String emailAddress){
+        return this.customerResetPassword.get(emailAddress);
     }
-    public CustomerResetPassword read(final String emailAddress){
-        return findMessage(emailAddress);
-
-    }
-
-    private CustomerResetPassword findMessage(String customerResetPassword) {
-        for(CustomerResetPassword c: this.customerResetPassword){
-            if(c.getEmailAddress().equals(customerResetPassword)) return c;
-        }
-        return null;
-    }
-
     public CustomerResetPassword update(CustomerResetPassword customerResetPassword){
-        CustomerResetPassword c = findMessage(customerResetPassword.getEmailAddress());
-        if(c != null){
-            CustomerResetPassword a = new CustomerResetPassword.Builder().Copy(customerResetPassword).build();
-            return create(a);
-        }
-        return null;
+        this.customerResetPassword.replace(customerResetPassword.getEmailAddress(),customerResetPassword);
+        return this.customerResetPassword.get(customerResetPassword.getEmailAddress());
     }
-
-    @Override
-    public void delete(String id) {
-
+    public void delete(String emailAddress){
+        this.customerResetPassword.remove(emailAddress);
     }
 
     public Set<CustomerResetPassword>getAll(){
-
-        return this.customerResetPassword;
+        Collection<CustomerResetPassword> customerResetPassword = this.customerResetPassword.values();
+        Set<CustomerResetPassword> set = new HashSet<>();
+        set.addAll(customerResetPassword);
+        return set;
     }
 }
 

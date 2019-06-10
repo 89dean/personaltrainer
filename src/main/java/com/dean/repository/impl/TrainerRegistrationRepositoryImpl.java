@@ -2,16 +2,15 @@ package com.dean.repository.impl;
 
 import com.dean.domain.TrainerRegistration;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class TrainerRegistrationRepositoryImpl implements TrainerRegistrationRepository {
 
     private static TrainerRegistrationRepositoryImpl repository = null;
-    private Set<TrainerRegistration> trainerRegistration;
+    private Map<String,TrainerRegistration> trainerRegistration;
 
     private TrainerRegistrationRepositoryImpl(){
-        this.trainerRegistration = new HashSet<>();
+        this.trainerRegistration = new HashMap<>();
     }
 
     public static TrainerRegistrationRepositoryImpl  getRepository(){
@@ -20,39 +19,24 @@ public class TrainerRegistrationRepositoryImpl implements TrainerRegistrationRep
     }
 
     public TrainerRegistration create(TrainerRegistration trainerRegistration){
-        this.trainerRegistration.add(trainerRegistration);
+        this.trainerRegistration.put(trainerRegistration.getId(),trainerRegistration);
         return trainerRegistration;
     }
-    public void delete(TrainerRegistration trainerRegistration){
-        this.trainerRegistration.remove(trainerRegistration);
+    public TrainerRegistration read(String id){
+        return this.trainerRegistration.get(id);
     }
-    public TrainerRegistration read(final String id){
-        return findMessage(id);
-
-    }
-
-    private TrainerRegistration findMessage(String trainerRegistration) {
-        for(TrainerRegistration c: this.trainerRegistration){
-            if(c.getId().equals(trainerRegistration)) return c;
-        }
-        return null;
-    }
-
     public TrainerRegistration update(TrainerRegistration trainerRegistration){
-        TrainerRegistration c = findMessage(trainerRegistration.getId());
-        if(c != null){
-            TrainerRegistration a = new TrainerRegistration.Builder().Copy(trainerRegistration).build();
-            return create(a);
-        }
-        return null;
+        this.trainerRegistration.replace(trainerRegistration.getId(),trainerRegistration);
+        return this.trainerRegistration.get(trainerRegistration.getId());
     }
-
-    @Override
-    public void delete(String id) {
-
+    public void delete(String id){
+        this.trainerRegistration.remove(id);
     }
 
     public Set<TrainerRegistration>getAll(){
-        return this.trainerRegistration;
+        Collection<TrainerRegistration> trainerRegistration = this.trainerRegistration.values();
+        Set<TrainerRegistration> set = new HashSet<>();
+        set.addAll(trainerRegistration);
+        return set;
     }
 }

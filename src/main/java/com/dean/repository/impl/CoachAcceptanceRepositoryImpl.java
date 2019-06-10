@@ -2,16 +2,15 @@ package com.dean.repository.impl;
 
 import com.dean.domain.CoachAcceptance;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CoachAcceptanceRepositoryImpl implements CoachAcceptanceRepository{
 
     private static CoachAcceptanceRepositoryImpl repository = null;
-    private Set<CoachAcceptance> coachAcceptance;
+    private Map<String, CoachAcceptance> coachAcceptance;
 
     private CoachAcceptanceRepositoryImpl(){
-        this.coachAcceptance = new HashSet<>();
+        this.coachAcceptance = new HashMap<>();
     }
 
     public static CoachAcceptanceRepository  getRepository(){
@@ -20,40 +19,27 @@ public class CoachAcceptanceRepositoryImpl implements CoachAcceptanceRepository{
     }
 
     public CoachAcceptance create(CoachAcceptance coachAcceptance){
-        this.coachAcceptance.add(coachAcceptance);
+        this.coachAcceptance.put(coachAcceptance.getMessage(),coachAcceptance);
         return coachAcceptance;
     }
-    public void delete(CoachAcceptance coachAcceptance){
-        this.coachAcceptance.remove(coachAcceptance);
-    }
-    public CoachAcceptance read(final String message){
-        return findMessage(message);
+    public CoachAcceptance read(String message){
+        return this.coachAcceptance.get(message);
 
     }
-
-    private CoachAcceptance findMessage(String message) {
-        for(CoachAcceptance c: this.coachAcceptance){
-            if(c.getMessage().equals(message)) return c;
-        }
-        return null;
-    }
-
     public CoachAcceptance update(CoachAcceptance coachAcceptance){
-        CoachAcceptance c = findMessage(coachAcceptance.getMessage());
-        if(c != null){
-            CoachAcceptance a = new CoachAcceptance.Builder().Copy(coachAcceptance).build();
-            return create(a);
-        }
-        return null;
+        this.coachAcceptance.replace(coachAcceptance.getMessage(),coachAcceptance);
+        return this.coachAcceptance.get(coachAcceptance.getMessage());
+
     }
-
-    @Override
-    public void delete(String message) {
-
+    public void delete(String message){
+        this.coachAcceptance.remove(message);
     }
 
     public Set<CoachAcceptance>getAll(){
-        return this.coachAcceptance;
+        Collection<CoachAcceptance> coachAcceptance = this.coachAcceptance.values();
+        Set<CoachAcceptance> set = new HashSet<>();
+        set.addAll(coachAcceptance);
+        return set;
     }
 
 }

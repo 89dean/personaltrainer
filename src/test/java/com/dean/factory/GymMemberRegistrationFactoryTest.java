@@ -1,8 +1,11 @@
 package com.dean.factory;
 
 import com.dean.domain.GymMemeberRegistration;
+import com.dean.util.Misc;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +17,8 @@ public class GymMemberRegistrationFactoryTest {
         String surname="february";
         String emailAddress="dean.february3@gmail.com";
         String preferedSport="Soccer";
+
+
 
         GymMemeberRegistration g = GymMemberRegistrationFactory.getGymMemberRegistartion(name,surname,emailAddress,preferedSport);
         System.out.println(g);

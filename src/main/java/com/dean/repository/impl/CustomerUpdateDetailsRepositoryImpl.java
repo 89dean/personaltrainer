@@ -2,16 +2,16 @@ package com.dean.repository.impl;
 
 import com.dean.domain.CustomerUpdateDetails;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CustomerUpdateDetailsRepositoryImpl implements CustomerUpdateDetailsRepository {
 
     private static CustomerUpdateDetailsRepositoryImpl repository = null;
-    private Set<CustomerUpdateDetails> customerUpdateDetails;
+    private Map<String,CustomerUpdateDetails> customerUpdateDetails;
 
     private CustomerUpdateDetailsRepositoryImpl(){
-        this.customerUpdateDetails = new HashSet<>();
+
+        this.customerUpdateDetails = new HashMap<>();
     }
 
     public static CustomerUpdateDetailsRepositoryImpl  getRepository(){
@@ -20,40 +20,25 @@ public class CustomerUpdateDetailsRepositoryImpl implements CustomerUpdateDetail
     }
 
     public CustomerUpdateDetails create(CustomerUpdateDetails customerUpdateDetails){
-        this.customerUpdateDetails.add(customerUpdateDetails);
+        this.customerUpdateDetails.put(customerUpdateDetails.getName(),customerUpdateDetails);
         return customerUpdateDetails;
     }
-    public void delete(CustomerUpdateDetails customerUpdateDetails){
-        this.customerUpdateDetails.remove(customerUpdateDetails);
+    public CustomerUpdateDetails read(String name){
+        return this.customerUpdateDetails.get(name);
     }
-    public CustomerUpdateDetails read(final String name){
-        return findMessage(name);
-
-    }
-
-    private CustomerUpdateDetails findMessage(String customerUpdateDetails) {
-        for(CustomerUpdateDetails c: this.customerUpdateDetails){
-            if(c.getName().equals(customerUpdateDetails)) return c;
-        }
-        return null;
-    }
-
     public CustomerUpdateDetails update(CustomerUpdateDetails customerUpdateDetails){
-        CustomerUpdateDetails c = findMessage(customerUpdateDetails.getName());
-        if(c != null){
-            CustomerUpdateDetails a = new CustomerUpdateDetails.Builder().Copy(customerUpdateDetails).build();
-            return create(a);
-        }
-        return null;
+        this.customerUpdateDetails.replace(customerUpdateDetails.getName(),customerUpdateDetails);
+        return this.customerUpdateDetails.get(customerUpdateDetails.getName());
     }
-
-    @Override
-    public void delete(String name) {
-
+    public void delete(String name){
+        this.customerUpdateDetails.remove(name);
     }
 
     public Set<CustomerUpdateDetails>getAll(){
-        return this.customerUpdateDetails;
+        Collection<CustomerUpdateDetails> customerUpdateDetails = this.customerUpdateDetails.values();
+        Set<CustomerUpdateDetails> set = new HashSet<>();
+        set.addAll(customerUpdateDetails);
+        return set;
     }
 }
 

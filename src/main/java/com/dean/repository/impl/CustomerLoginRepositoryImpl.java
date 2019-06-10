@@ -2,16 +2,16 @@ package com.dean.repository.impl;
 
 import com.dean.domain.CustomerLogin;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CustomerLoginRepositoryImpl implements CustomerLoginRepository{
 
     private static CustomerLoginRepositoryImpl repository = null;
-    private Set<CustomerLogin> customerLogin;
+    private Map<String,CustomerLogin> customerLogin;
 
     private CustomerLoginRepositoryImpl(){
-        this.customerLogin = new HashSet<>();
+
+        this.customerLogin = new HashMap<>();
     }
 
     public static CustomerLoginRepositoryImpl  getRepository(){
@@ -20,40 +20,25 @@ public class CustomerLoginRepositoryImpl implements CustomerLoginRepository{
     }
 
     public CustomerLogin create(CustomerLogin customerLogin){
-        this.customerLogin.add(customerLogin);
+        this.customerLogin.put(customerLogin.getEmailAddress(),customerLogin);
         return customerLogin;
     }
-    public void delete(CustomerLogin customerLogin){
-        this.customerLogin.remove(customerLogin);
+    public CustomerLogin read(String emailAddress){
+        return this.customerLogin.get(emailAddress);
     }
-    public CustomerLogin read(final String emailAddress){
-        return findMessage(emailAddress);
-
-    }
-
-    private CustomerLogin findMessage(String customerLogin) {
-        for(CustomerLogin c: this.customerLogin){
-            if(c.getEmailAddress().equals(customerLogin)) return c;
-        }
-        return null;
-    }
-
     public CustomerLogin update(CustomerLogin customerLogin){
-        CustomerLogin c = findMessage(customerLogin.getEmailAddress());
-        if(c != null){
-            CustomerLogin a = new CustomerLogin.Builder().Copy(customerLogin).build();
-            return create(a);
-        }
-        return null;
+        this.customerLogin.replace(customerLogin.getEmailAddress(),customerLogin);
+        return this.customerLogin.get(customerLogin.getEmailAddress());
     }
+    public void delete(String emailAddress){
 
-    @Override
-    public void delete(String emailAddress) {
-
+        this.customerLogin.remove(emailAddress);
     }
 
     public Set<CustomerLogin>getAll(){
-
-        return this.customerLogin;
+        Collection<CustomerLogin> customerLogin = this.customerLogin.values();
+        Set<CustomerLogin> set = new HashSet<>();
+        set.addAll(customerLogin);
+        return set;
     }
 }

@@ -2,16 +2,16 @@ package com.dean.repository.impl;
 
 import com.dean.domain.TrainerAcceptance;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class TrainerAcceptanceRepositoryImpl implements TrainerAcceptanceRepository {
 
     private static TrainerAcceptanceRepositoryImpl repository = null;
-    private Set<TrainerAcceptance> trainerAcceptance;
+    private Map<String,TrainerAcceptance> trainerAcceptance;
 
     private TrainerAcceptanceRepositoryImpl(){
-        this.trainerAcceptance = new HashSet<>();
+
+        this.trainerAcceptance = new HashMap<>();
     }
 
     public static TrainerAcceptanceRepositoryImpl  getRepository(){
@@ -20,39 +20,25 @@ public class TrainerAcceptanceRepositoryImpl implements TrainerAcceptanceReposit
     }
 
     public TrainerAcceptance create(TrainerAcceptance trainerAcceptance){
-        this.trainerAcceptance.add(trainerAcceptance);
+        this.trainerAcceptance.put(trainerAcceptance.getMessage(),trainerAcceptance);
         return trainerAcceptance;
     }
-    public void delete(TrainerAcceptance trainerAcceptance){
-        this.trainerAcceptance.remove(trainerAcceptance);
-    }
     public TrainerAcceptance read(final String message){
-        return findMessage(message);
+        return this.trainerAcceptance.get(message);
 
     }
-
-    private TrainerAcceptance findMessage(String message) {
-        for(TrainerAcceptance c: this.trainerAcceptance){
-            if(c.getMessage().equals(message)) return c;
-        }
-        return null;
-    }
-
     public TrainerAcceptance update(TrainerAcceptance trainerAcceptance){
-        TrainerAcceptance c = findMessage(trainerAcceptance.getMessage());
-        if(c != null){
-            TrainerAcceptance a = new TrainerAcceptance.Builder().Copy(trainerAcceptance).build();
-            return create(a);
-        }
-        return null;
+        this.trainerAcceptance.replace(trainerAcceptance.getMessage(),trainerAcceptance);
+        return this.trainerAcceptance.get(trainerAcceptance.getMessage());
+    }
+    public void delete(String message){
+        this.trainerAcceptance.remove(message);
     }
 
-    @Override
-    public void delete(String message) {
-
-    }
-
-    public Set<TrainerAcceptance>getAll(){
-        return this.trainerAcceptance;
+    public Set<TrainerAcceptance>getAll() {
+        Collection<TrainerAcceptance> trainerAcceptance = this.trainerAcceptance.values();
+        Set<TrainerAcceptance> set = new HashSet<>();
+        set.addAll(trainerAcceptance);
+        return set;
     }
 }

@@ -16,6 +16,6 @@ public class CoachAcceptanceFactoryTest {
 
         CoachAcceptance c = CoachAcceptanceFactory.getCoachAcceptance(name,surname,message);
         System.out.println(c);
-        Assert.assertNotNull(c.getName(name));
+        Assert.assertNotNull(c.getName());
     }
 }

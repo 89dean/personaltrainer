@@ -2,58 +2,44 @@ package com.dean.repository.impl;
 
 import com.dean.domain.TrainerUpdateDetails;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class TrainerUpdateDetailsRepositoryImpl implements TrainerUpdateDetailsRepository {
 
     private static TrainerUpdateDetailsRepositoryImpl repository = null;
-    private Set<TrainerUpdateDetails> trainerUpdateDetails;
+    private Map<String,TrainerUpdateDetails> trainerUpdateDetails;
 
     private TrainerUpdateDetailsRepositoryImpl(){
-        this.trainerUpdateDetails = new HashSet<>();
+
+        this.trainerUpdateDetails = new HashMap<>();
     }
 
     public static TrainerUpdateDetailsRepositoryImpl  getRepository(){
         if (repository==null)repository = new TrainerUpdateDetailsRepositoryImpl();
         return repository;
     }
-
     public TrainerUpdateDetails create(TrainerUpdateDetails trainerUpdateDetails){
-        this.trainerUpdateDetails.add(trainerUpdateDetails);
+        this.trainerUpdateDetails.put(trainerUpdateDetails.getName(),trainerUpdateDetails);
         return trainerUpdateDetails;
     }
-    public void delete(TrainerUpdateDetails trainerUpdateDetails){
-        this.trainerUpdateDetails.remove(trainerUpdateDetails);
-    }
-    public TrainerUpdateDetails read(final String name){
-        return findMessage(name);
+    public TrainerUpdateDetails read(String name){
 
+        return this.trainerUpdateDetails.get(name);
     }
-
-    private TrainerUpdateDetails findMessage(String trainerUpdateDetails) {
-        for(TrainerUpdateDetails c: this.trainerUpdateDetails){
-            if(c.getName().equals(trainerUpdateDetails)) return c;
-        }
-        return null;
-    }
-
     public TrainerUpdateDetails update(TrainerUpdateDetails trainerUpdateDetails){
-        TrainerUpdateDetails c = findMessage(trainerUpdateDetails.getName());
-        if(c != null){
-            TrainerUpdateDetails a = new TrainerUpdateDetails.Builder().Copy(trainerUpdateDetails).build();
-            return create(a);
-        }
-        return null;
+        this.trainerUpdateDetails.replace(trainerUpdateDetails.getName(),trainerUpdateDetails);
+        return this.trainerUpdateDetails.get(trainerUpdateDetails.getName());
     }
-
-    @Override
-    public void delete(String id) {
-
+    public void delete(String name){
+        this.trainerUpdateDetails.remove(name);
     }
 
     public Set<TrainerUpdateDetails>getAll(){
-        return this.trainerUpdateDetails;
+        Collection<TrainerUpdateDetails> trainerUpdateDetails = this.trainerUpdateDetails.values();
+        Set<TrainerUpdateDetails> set = new HashSet<>();
+        set.addAll(trainerUpdateDetails);
+        return set;
     }
+
 }
 

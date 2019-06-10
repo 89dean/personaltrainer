@@ -2,16 +2,16 @@ package com.dean.repository.impl;
 
 import com.dean.domain.CoachUpdateDetails;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CoachUpdateDetailsRepositoryImpl implements CoachUpdateDetailsRepository {
 
     private static CoachUpdateDetailsRepositoryImpl repository = null;
-    private Set<CoachUpdateDetails> coachUpdateDetails;
+    private Map<String,CoachUpdateDetails> coachUpdateDetails;
 
     private CoachUpdateDetailsRepositoryImpl(){
-        this.coachUpdateDetails = new HashSet<>();
+
+        this.coachUpdateDetails = new HashMap<>();
     }
 
     public static CoachUpdateDetailsRepositoryImpl  getRepository(){
@@ -20,39 +20,24 @@ public class CoachUpdateDetailsRepositoryImpl implements CoachUpdateDetailsRepos
     }
 
     public CoachUpdateDetails create(CoachUpdateDetails coachUpdateDetails){
-        this.coachUpdateDetails.add(coachUpdateDetails);
+        this.coachUpdateDetails.put(coachUpdateDetails.getName(),coachUpdateDetails);
         return coachUpdateDetails;
     }
-    public void delete(CoachUpdateDetails coachUpdateDetails){
-        this.coachUpdateDetails.remove(coachUpdateDetails);
+    public CoachUpdateDetails read(String name){
+        return this.coachUpdateDetails.get(name);
     }
-    public CoachUpdateDetails read(final String name){
-        return findMessage(name);
-
-    }
-
-    private CoachUpdateDetails findMessage(String coachUpdateDetails) {
-        for(CoachUpdateDetails c: this.coachUpdateDetails){
-            if(c.getName().equals(coachUpdateDetails)) return c;
-        }
-        return null;
-    }
-
     public CoachUpdateDetails update(CoachUpdateDetails coachUpdateDetails){
-        CoachUpdateDetails c = findMessage(coachUpdateDetails.getName());
-        if(c != null){
-            CoachUpdateDetails a = new CoachUpdateDetails.Builder().Copy(coachUpdateDetails).build();
-            return create(a);
-        }
-        return null;
+        this.coachUpdateDetails.replace(coachUpdateDetails.getName(),coachUpdateDetails);
+        return this.coachUpdateDetails.get(coachUpdateDetails.getName());
     }
-
-    @Override
-    public void delete(String id) {
-
+    public void delete(String name){
+        this.coachUpdateDetails.remove(name);
     }
 
     public Set<CoachUpdateDetails>getAll(){
-        return this.coachUpdateDetails;
+        Collection<CoachUpdateDetails> coachUpdateDetails = this.coachUpdateDetails.values();
+        Set<CoachUpdateDetails> set = new HashSet<>();
+        set.addAll(coachUpdateDetails);
+        return set;
     }
 }

@@ -2,16 +2,16 @@ package com.dean.repository.impl;
 
 import com.dean.domain.GymMemberLogin;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class GymMemberLoginRepositoryImpl implements GymMemberLoginRepository {
 
     private static GymMemberLoginRepositoryImpl repository = null;
-    private Set<GymMemberLogin> gymMemberLogin;
+    private Map<String,GymMemberLogin> gymMemberLogin;
 
     private GymMemberLoginRepositoryImpl(){
-        this.gymMemberLogin = new HashSet<>();
+
+        this.gymMemberLogin = new HashMap<>();
     }
 
     public static GymMemberLoginRepositoryImpl  getRepository(){
@@ -20,40 +20,26 @@ public class GymMemberLoginRepositoryImpl implements GymMemberLoginRepository {
     }
 
     public GymMemberLogin create(GymMemberLogin gymMemberLogin){
-        this.gymMemberLogin.add(gymMemberLogin);
+        this.gymMemberLogin.put(gymMemberLogin.getEmailAddress(),gymMemberLogin);
         return gymMemberLogin;
     }
-    public void delete(GymMemberLogin gymMemberLogin){
-        this.gymMemberLogin.remove(gymMemberLogin);
-    }
-    public GymMemberLogin read(final String emailAddress){
-        return findMessage(emailAddress);
-
-    }
-
-    private GymMemberLogin findMessage(String gymMemberLogin) {
-        for(GymMemberLogin c: this.gymMemberLogin){
-            if(c.getEmailAddress().equals(gymMemberLogin)) return c;
-        }
-        return null;
+    public GymMemberLogin read(String emailAddress){
+        return this.gymMemberLogin.get(emailAddress);
     }
 
     public GymMemberLogin update(GymMemberLogin gymMemberLogin){
-        GymMemberLogin c = findMessage(gymMemberLogin.getEmailAddress());
-        if(c != null){
-            GymMemberLogin a = new GymMemberLogin.Builder().Copy(gymMemberLogin).build();
-            return create(a);
-        }
-        return null;
+        this.gymMemberLogin.replace(gymMemberLogin.getEmailAddress(),gymMemberLogin);
+        return this.gymMemberLogin.get(gymMemberLogin.getEmailAddress());
     }
+    public void delete(String emailAddress){
 
-    @Override
-    public void delete(String emailAddress) {
-
+        this.gymMemberLogin.remove(emailAddress);
     }
 
     public Set<GymMemberLogin>getAll(){
-
-        return this.gymMemberLogin;
+        Collection<GymMemberLogin> gymMemberLogin = this.gymMemberLogin.values();
+        Set<GymMemberLogin> set = new HashSet<>();
+        set.addAll(gymMemberLogin);
+        return set;
     }
 }

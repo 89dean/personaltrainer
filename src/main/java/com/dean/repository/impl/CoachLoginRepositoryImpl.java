@@ -2,16 +2,17 @@ package com.dean.repository.impl;
 
 import com.dean.domain.CoachLogin;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CoachLoginRepositoryImpl implements CoachLoginRepository {
 
     private static CoachLoginRepositoryImpl repository = null;
-    private Set<CoachLogin> coachLogin;
+     private Map<String, CoachLogin> coachLogin;
+
 
     private CoachLoginRepositoryImpl(){
-        this.coachLogin = new HashSet<>();
+
+        this.coachLogin = new HashMap<>();
     }
 
     public static CoachLoginRepository  getRepository(){
@@ -20,39 +21,27 @@ public class CoachLoginRepositoryImpl implements CoachLoginRepository {
     }
 
     public CoachLogin create(CoachLogin coachLogin){
-        this.coachLogin.add(coachLogin);
+        this.coachLogin.put(coachLogin.getEmailAddress(),coachLogin);
         return coachLogin;
     }
-    public void delete(CoachLogin coachLogin){
-        this.coachLogin.remove(coachLogin);
-    }
-    public CoachLogin read(final String emailAddress){
-        return findMessage(emailAddress);
+    public CoachLogin read(String emailAddress){
 
-    }
-
-    private CoachLogin findMessage(String emailAddress) {
-        for(CoachLogin c: this.coachLogin){
-            if(c.getEmailAddress().equals(emailAddress)) return c;
-        }
-        return null;
+        return this.coachLogin.get(emailAddress);
     }
 
     public CoachLogin update(CoachLogin coachLogin){
-        CoachLogin c = findMessage(coachLogin.getEmailAddress());
-        if(c != null){
-            CoachLogin a = new CoachLogin.Builder().Copy(coachLogin).build();
-            return create(a);
-        }
-        return null;
+        this.coachLogin.replace(coachLogin.getEmailAddress(),coachLogin);
+        return this.coachLogin.get(coachLogin.getEmailAddress());
     }
+    public void delete(String emailAddress){
 
-    @Override
-    public void delete(String message) {
-
+        this.coachLogin.remove(emailAddress);
     }
 
     public Set<CoachLogin>getAll(){
-        return this.coachLogin;
+        Collection<CoachLogin>coachLogin = this.coachLogin.values();
+        Set<CoachLogin> set = new HashSet<>();
+        set.addAll(coachLogin);
+        return set;
     }
 }

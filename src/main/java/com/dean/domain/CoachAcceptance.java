@@ -47,7 +47,9 @@ public class CoachAcceptance implements Comparable<CoachAcceptance> {
 
             return this;
         }
-        public CoachAcceptance build(){return new CoachAcceptance(this);}
+        public CoachAcceptance build(){
+            return new CoachAcceptance(this);
+        }
     }
     @Override
     public String toString() {

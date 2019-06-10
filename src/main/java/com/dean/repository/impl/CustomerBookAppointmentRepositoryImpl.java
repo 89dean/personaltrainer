@@ -2,16 +2,16 @@ package com.dean.repository.impl;
 
 import com.dean.domain.CustomerBookAppointment;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CustomerBookAppointmentRepositoryImpl implements CustomerBookAppointmentRepository {
 
     private static CustomerBookAppointmentRepositoryImpl repository = null;
-    private Set<CustomerBookAppointment> customerBookAppointment;
+    private Map<String,CustomerBookAppointment> customerBookAppointment;
 
     private CustomerBookAppointmentRepositoryImpl(){
-        this.customerBookAppointment = new HashSet<>();
+
+        this.customerBookAppointment = new HashMap<>();
     }
 
     public static CustomerBookAppointmentRepositoryImpl  getRepository(){
@@ -20,40 +20,24 @@ public class CustomerBookAppointmentRepositoryImpl implements CustomerBookAppoin
     }
 
     public CustomerBookAppointment create(CustomerBookAppointment customerBookAppointment){
-        this.customerBookAppointment.add(customerBookAppointment);
+        this.customerBookAppointment.put(customerBookAppointment.getName(),customerBookAppointment);
         return customerBookAppointment;
     }
-    public void delete(CustomerBookAppointment customerBookAppointment){
-        this.customerBookAppointment.remove(customerBookAppointment);
+    public CustomerBookAppointment read(String name){
+        return this.customerBookAppointment.get(name);
     }
-    public CustomerBookAppointment read(final String name){
-        return findMessage(name);
-
-    }
-
-    private CustomerBookAppointment findMessage(String customerBookAppointment) {
-        for(CustomerBookAppointment c: this.customerBookAppointment){
-            if(c.getName().equals(customerBookAppointment)) return c;
-        }
-        return null;
-    }
-
     public CustomerBookAppointment update(CustomerBookAppointment customerBookAppointment){
-        CustomerBookAppointment c = findMessage(customerBookAppointment.getName());
-        if(c != null){
-            CustomerBookAppointment a = new CustomerBookAppointment.Builder().Copy(customerBookAppointment).build();
-            return create(a);
-        }
-        return null;
+        this.customerBookAppointment.replace(customerBookAppointment.getName(),customerBookAppointment);
+        return this.customerBookAppointment.get(customerBookAppointment.getName());
     }
-
-    @Override
-    public void delete(String id) {
-
+    public void delete(String name){
+        this.customerBookAppointment.remove(name);
     }
 
     public Set<CustomerBookAppointment>getAll(){
-
-        return this.customerBookAppointment;
+        Collection<CustomerBookAppointment> customerBookAppointment = this.customerBookAppointment.values();
+        Set<CustomerBookAppointment> set = new HashSet<>();
+        set.addAll(customerBookAppointment);
+        return set;
     }
 }

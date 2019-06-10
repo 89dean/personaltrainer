@@ -36,6 +36,7 @@ public class GymMemeberRegistration implements Comparable<GymMemeberRegistration
 
     @Override
     public int compareTo(GymMemeberRegistration o) {
+
         return this.emailAddress.compareTo(o.emailAddress);
     }
 
@@ -72,6 +73,7 @@ public class GymMemeberRegistration implements Comparable<GymMemeberRegistration
             return this;
         }
         public GymMemeberRegistration build(){
+
             return new GymMemeberRegistration(this);
         }
     }

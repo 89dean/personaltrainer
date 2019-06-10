@@ -2,16 +2,16 @@ package com.dean.repository.impl;
 
 import com.dean.domain.TrainerResetPassword;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class TrainerResetPasswordRepositoryImpl implements TrainerResetPasswordRepository {
 
     private static TrainerResetPasswordRepositoryImpl repository = null;
-    private Set<TrainerResetPassword> trainerResetPassword;
+    private Map<String,TrainerResetPassword> trainerResetPassword;
 
     private TrainerResetPasswordRepositoryImpl(){
-        this.trainerResetPassword = new HashSet<>();
+
+        this.trainerResetPassword = new HashMap<>();
     }
 
     public static TrainerResetPasswordRepositoryImpl  getRepository(){
@@ -20,40 +20,25 @@ public class TrainerResetPasswordRepositoryImpl implements TrainerResetPasswordR
     }
 
     public TrainerResetPassword create(TrainerResetPassword trainerResetPassword){
-        this.trainerResetPassword.add(trainerResetPassword);
+        this.trainerResetPassword.put(trainerResetPassword.getEmailAddress(),trainerResetPassword);
         return trainerResetPassword;
     }
-    public void delete(TrainerResetPassword trainerResetPassword){
-        this.trainerResetPassword.remove(trainerResetPassword);
+    public TrainerResetPassword read(String emailAddress){
+        return this.trainerResetPassword.get(emailAddress);
     }
-    public TrainerResetPassword read(final String emailAddress){
-        return findMessage(emailAddress);
-
-    }
-
-    private TrainerResetPassword findMessage(String trainerResetPassword) {
-        for(TrainerResetPassword c: this.trainerResetPassword){
-            if(c.getEmailAddress().equals(trainerResetPassword)) return c;
-        }
-        return null;
-    }
-
     public TrainerResetPassword update(TrainerResetPassword trainerResetPassword){
-        TrainerResetPassword c = findMessage(trainerResetPassword.getEmailAddress());
-        if(c != null){
-            TrainerResetPassword a = new TrainerResetPassword.Builder().Copy(trainerResetPassword).build();
-            return create(a);
-        }
-        return null;
+        this.trainerResetPassword.replace(trainerResetPassword.getEmailAddress(),trainerResetPassword);
+        return this.trainerResetPassword.get(trainerResetPassword.getEmailAddress());
     }
-
-    @Override
-    public void delete(String id) {
-
+    public void delete(String emailAddress){
+        this.trainerResetPassword.remove(emailAddress);
     }
 
     public Set<TrainerResetPassword>getAll(){
-        return this.trainerResetPassword;
+        Collection<TrainerResetPassword> trainerResetPassword = this.trainerResetPassword.values();
+        Set<TrainerResetPassword> set = new HashSet<>();
+        set.addAll(trainerResetPassword);
+        return set;
     }
 }
 

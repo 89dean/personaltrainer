@@ -3,16 +3,16 @@ package com.dean.repository.impl;
 import com.dean.domain.CoachRegistration;
 import com.dean.domain.CoachResetPassword;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CoachResetPasswordRepositoryImpl implements CoachResetPasswordRepository {
 
     private static CoachResetPasswordRepositoryImpl repository = null;
-    private Set<CoachResetPassword> coachResetPassword;
+    private Map<String,CoachResetPassword> coachResetPassword;
 
     private CoachResetPasswordRepositoryImpl(){
-        this.coachResetPassword = new HashSet<>();
+
+        this.coachResetPassword = new HashMap<>();
     }
 
     public static CoachResetPasswordRepositoryImpl  getRepository(){
@@ -21,39 +21,24 @@ public class CoachResetPasswordRepositoryImpl implements CoachResetPasswordRepos
     }
 
     public CoachResetPassword create(CoachResetPassword coachResetPassword){
-        this.coachResetPassword.add(coachResetPassword);
+        this.coachResetPassword.put(coachResetPassword.getEmailAddress(),coachResetPassword);
         return coachResetPassword;
     }
-    public void delete(CoachResetPassword coachResetPassword){
-        this.coachResetPassword.remove(coachResetPassword);
+    public CoachResetPassword read(String emailAddress){
+        return this.coachResetPassword.get(emailAddress);
     }
-    public CoachResetPassword read(final String emailAddress){
-        return findMessage(emailAddress);
-
-    }
-
-    private CoachResetPassword findMessage(String coachResetPassword) {
-        for(CoachResetPassword c: this.coachResetPassword){
-            if(c.getEmailAddress().equals(coachResetPassword)) return c;
-        }
-        return null;
-    }
-
     public CoachResetPassword update(CoachResetPassword coachResetPassword){
-        CoachResetPassword c = findMessage(coachResetPassword.getEmailAddress());
-        if(c != null){
-            CoachResetPassword a = new CoachResetPassword.Builder().Copy(coachResetPassword).build();
-            return create(a);
-        }
-        return null;
+        this.coachResetPassword.replace(coachResetPassword.getEmailAddress(),coachResetPassword);
+        return this.coachResetPassword.get(coachResetPassword.getEmailAddress());
     }
-
-    @Override
-    public void delete(String id) {
-
+    public void delete(String emailAddress){
+        this.coachResetPassword.remove(emailAddress);
     }
 
     public Set<CoachResetPassword>getAll(){
-        return this.coachResetPassword;
+        Collection<CoachResetPassword> coachResetPassword = this.coachResetPassword.values();
+        Set<CoachResetPassword> set = new HashSet<>();
+        set.addAll(coachResetPassword);
+        return set;
     }
 }

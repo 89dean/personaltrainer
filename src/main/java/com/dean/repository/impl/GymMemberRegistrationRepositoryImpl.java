@@ -3,16 +3,15 @@ package com.dean.repository.impl;
 import com.dean.domain.GymMemberLogin;
 import com.dean.domain.GymMemeberRegistration;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class GymMemberRegistrationRepositoryImpl implements GymMemberRegistrationRepository {
 
     private static GymMemberRegistrationRepositoryImpl repository = null;
-    private Set<GymMemeberRegistration> gymMemberRegistration;
+    private Map<String,GymMemeberRegistration> gymMemberRegistration;
 
     private GymMemberRegistrationRepositoryImpl(){
-        this.gymMemberRegistration = new HashSet<>();
+        this.gymMemberRegistration = new HashMap<>();
     }
 
     public static GymMemberRegistrationRepositoryImpl  getRepository(){
@@ -21,40 +20,24 @@ public class GymMemberRegistrationRepositoryImpl implements GymMemberRegistratio
     }
 
     public GymMemeberRegistration create(GymMemeberRegistration gymMemeberRegistration){
-        this.gymMemberRegistration.add(gymMemeberRegistration);
+        this.gymMemberRegistration.put(gymMemeberRegistration.getid(),gymMemeberRegistration);
         return gymMemeberRegistration;
     }
-    public void delete(GymMemeberRegistration gymMemberRegistration){
-        this.gymMemberRegistration.remove(gymMemberRegistration);
+    public GymMemeberRegistration read(String id){
+        return this.gymMemberRegistration.get(id);
     }
-    public GymMemeberRegistration read(final String emailAddress){
-        return findMessage(emailAddress);
-
-    }
-
-    private GymMemeberRegistration findMessage(String customerLogin) {
-        for(GymMemeberRegistration c: this.gymMemberRegistration){
-            if(c.getEmailAddress().equals(customerLogin)) return c;
-        }
-        return null;
-    }
-
     public GymMemeberRegistration update(GymMemeberRegistration gymMemeberRegistration){
-        GymMemeberRegistration c = findMessage(gymMemeberRegistration.getEmailAddress());
-        if(c != null){
-            GymMemeberRegistration a = new GymMemeberRegistration.Builder().Copy(gymMemeberRegistration).build();
-            return create(a);
-        }
-        return null;
+        this.gymMemberRegistration.replace(gymMemeberRegistration.getid(),gymMemeberRegistration);
+        return this.gymMemberRegistration.get(gymMemeberRegistration.getid());
     }
-
-    @Override
-    public void delete(String emailAddress) {
-
+    public void delete(String id){
+        this.gymMemberRegistration.remove(id);
     }
 
     public Set<GymMemeberRegistration>getAll(){
-
-        return this.gymMemberRegistration;
+        Collection<GymMemeberRegistration> gymMemeberRegistration = this.gymMemberRegistration.values();
+        Set<GymMemeberRegistration> set = new HashSet<>();
+        set.addAll(gymMemeberRegistration);
+        return set;
     }
 }
