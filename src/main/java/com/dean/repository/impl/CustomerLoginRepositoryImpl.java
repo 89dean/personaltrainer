@@ -1,44 +1,54 @@
 package com.dean.repository.impl;
 
 import com.dean.domain.CustomerLogin;
+import com.dean.repository.CustomerLoginRepository;
 
 import java.util.*;
 
-public class CustomerLoginRepositoryImpl implements CustomerLoginRepository{
+public class CustomerLoginRepositoryImpl implements CustomerLoginRepository {
 
     private static CustomerLoginRepositoryImpl repository = null;
-    private Map<String,CustomerLogin> customerLogin;
+    private Set<CustomerLogin> customerLogin;
 
     private CustomerLoginRepositoryImpl(){
 
-        this.customerLogin = new HashMap<>();
+        this.customerLogin = new HashSet<>();
+    }
+    private CustomerLogin findEmailAddress(String emailAddress) {
+        return this.customerLogin.stream()
+                .filter(customerLogin -> customerLogin.getEmailAddress().trim().equals(emailAddress))
+                .findAny()
+                .orElse(null);
     }
 
-    public static CustomerLoginRepositoryImpl  getRepository(){
+
+        public static CustomerLoginRepositoryImpl  getRepository(){
         if (repository==null)repository = new CustomerLoginRepositoryImpl();
         return repository;
     }
 
     public CustomerLogin create(CustomerLogin customerLogin){
-        this.customerLogin.put(customerLogin.getEmailAddress(),customerLogin);
+        this.customerLogin.add(customerLogin);
         return customerLogin;
     }
     public CustomerLogin read(String emailAddress){
-        return this.customerLogin.get(emailAddress);
+        CustomerLogin customerLogin = findEmailAddress(emailAddress);
+        return customerLogin;
     }
     public CustomerLogin update(CustomerLogin customerLogin){
-        this.customerLogin.replace(customerLogin.getEmailAddress(),customerLogin);
-        return this.customerLogin.get(customerLogin.getEmailAddress());
+        CustomerLogin toDelete = findEmailAddress(customerLogin.getEmailAddress());
+        if(toDelete != null) {
+            this.customerLogin.remove(toDelete);
+            return create(customerLogin);
+        }
+        return null;
     }
     public void delete(String emailAddress){
-
-        this.customerLogin.remove(emailAddress);
+        CustomerLogin customerLogin = findEmailAddress(emailAddress);
+        if (customerLogin != null) this.customerLogin.remove(emailAddress);
     }
 
     public Set<CustomerLogin>getAll(){
-        Collection<CustomerLogin> customerLogin = this.customerLogin.values();
-        Set<CustomerLogin> set = new HashSet<>();
-        set.addAll(customerLogin);
-        return set;
+        return this.customerLogin;
     }
 }

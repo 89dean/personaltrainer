@@ -1,18 +1,25 @@
 package com.dean.repository.impl;
 
 import com.dean.domain.CoachLogin;
+import com.dean.repository.CoachLoginRepository;
 
 import java.util.*;
 
 public class CoachLoginRepositoryImpl implements CoachLoginRepository {
 
     private static CoachLoginRepositoryImpl repository = null;
-     private Map<String, CoachLogin> coachLogin;
+     private Set<CoachLogin> coachLogin;
 
 
     private CoachLoginRepositoryImpl(){
 
-        this.coachLogin = new HashMap<>();
+        this.coachLogin = new HashSet<>();
+    }
+    private CoachLogin findEmailAddress(String emailaddress) {
+        return this.coachLogin.stream()
+                .filter(coachLogin -> coachLogin.getEmailAddress().trim().equals(emailaddress))
+                .findAny()
+                .orElse(null);
     }
 
     public static CoachLoginRepository  getRepository(){
@@ -21,27 +28,29 @@ public class CoachLoginRepositoryImpl implements CoachLoginRepository {
     }
 
     public CoachLogin create(CoachLogin coachLogin){
-        this.coachLogin.put(coachLogin.getEmailAddress(),coachLogin);
+        this.coachLogin.add(coachLogin);
         return coachLogin;
     }
-    public CoachLogin read(String emailAddress){
-
-        return this.coachLogin.get(emailAddress);
+    public CoachLogin read(final String emailAddress){
+        CoachLogin coachLogin = findEmailAddress(emailAddress);
+        return coachLogin;
     }
 
     public CoachLogin update(CoachLogin coachLogin){
-        this.coachLogin.replace(coachLogin.getEmailAddress(),coachLogin);
-        return this.coachLogin.get(coachLogin.getEmailAddress());
+        CoachLogin toDelete = findEmailAddress(coachLogin.getEmailAddress());
+        if(toDelete != null) {
+            this.coachLogin.remove(toDelete);
+            return create(coachLogin);
+        }
+        return null;
     }
     public void delete(String emailAddress){
 
-        this.coachLogin.remove(emailAddress);
+        CoachLogin coachAcceptance = findEmailAddress(emailAddress);
+        if (coachAcceptance != null) this.coachLogin.remove(emailAddress);
     }
 
     public Set<CoachLogin>getAll(){
-        Collection<CoachLogin>coachLogin = this.coachLogin.values();
-        Set<CoachLogin> set = new HashSet<>();
-        set.addAll(coachLogin);
-        return set;
+        return this.coachLogin;
     }
 }

@@ -1,17 +1,23 @@
 package com.dean.repository.impl;
 
-import com.dean.domain.GymMemberLogin;
-import com.dean.domain.GymMemeberRegistration;
+import com.dean.domain.GymMemberRegistration;
+import com.dean.repository.GymMemberRegistrationRepository;
 
 import java.util.*;
 
 public class GymMemberRegistrationRepositoryImpl implements GymMemberRegistrationRepository {
 
     private static GymMemberRegistrationRepositoryImpl repository = null;
-    private Map<String,GymMemeberRegistration> gymMemberRegistration;
+    private Set<GymMemberRegistration> gymMemberRegistration;
 
     private GymMemberRegistrationRepositoryImpl(){
-        this.gymMemberRegistration = new HashMap<>();
+        this.gymMemberRegistration = new HashSet<>();
+    }
+    private GymMemberRegistration findid(String id) {
+        return this.gymMemberRegistration.stream()
+                .filter(gymMemberRegistration -> gymMemberRegistration.getid().trim().equals(id))
+                .findAny()
+                .orElse(null);
     }
 
     public static GymMemberRegistrationRepositoryImpl  getRepository(){
@@ -19,25 +25,28 @@ public class GymMemberRegistrationRepositoryImpl implements GymMemberRegistratio
         return repository;
     }
 
-    public GymMemeberRegistration create(GymMemeberRegistration gymMemeberRegistration){
-        this.gymMemberRegistration.put(gymMemeberRegistration.getid(),gymMemeberRegistration);
-        return gymMemeberRegistration;
+    public GymMemberRegistration create(GymMemberRegistration gymMemberRegistration){
+        this.gymMemberRegistration.add(gymMemberRegistration);
+        return gymMemberRegistration;
     }
-    public GymMemeberRegistration read(String id){
-        return this.gymMemberRegistration.get(id);
+    public GymMemberRegistration read(String id){
+        GymMemberRegistration gymMemberRegistration = findid(id);
+        return gymMemberRegistration;
     }
-    public GymMemeberRegistration update(GymMemeberRegistration gymMemeberRegistration){
-        this.gymMemberRegistration.replace(gymMemeberRegistration.getid(),gymMemeberRegistration);
-        return this.gymMemberRegistration.get(gymMemeberRegistration.getid());
+    public GymMemberRegistration update(GymMemberRegistration gymMemberRegistration){
+        GymMemberRegistration toDelete = findid(gymMemberRegistration.getEmailAddress());
+        if(toDelete != null) {
+            this.gymMemberRegistration.remove(toDelete);
+            return create(gymMemberRegistration);
+        }
+        return null;
     }
     public void delete(String id){
-        this.gymMemberRegistration.remove(id);
+        GymMemberRegistration gymMemberRegistration = findid(id);
+        if (gymMemberRegistration != null) this.gymMemberRegistration.remove(id);
     }
 
-    public Set<GymMemeberRegistration>getAll(){
-        Collection<GymMemeberRegistration> gymMemeberRegistration = this.gymMemberRegistration.values();
-        Set<GymMemeberRegistration> set = new HashSet<>();
-        set.addAll(gymMemeberRegistration);
-        return set;
+    public Set<GymMemberRegistration>getAll(){
+        return this.gymMemberRegistration;
     }
 }

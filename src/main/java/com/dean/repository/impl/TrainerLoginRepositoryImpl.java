@@ -1,17 +1,24 @@
 package com.dean.repository.impl;
 
 import com.dean.domain.TrainerLogin;
+import com.dean.repository.TrainerLoginRepository;
 
 import java.util.*;
 
 public class TrainerLoginRepositoryImpl implements TrainerLoginRepository {
 
     private static TrainerLoginRepositoryImpl repository = null;
-    private Map<String,TrainerLogin> trainerLogin;
+    private Set<TrainerLogin> trainerLogin;
 
     private TrainerLoginRepositoryImpl(){
 
-        this.trainerLogin = new HashMap<>();
+        this.trainerLogin = new HashSet<>();
+    }
+    private TrainerLogin findEmailAddress(String emailAddress) {
+        return this.trainerLogin.stream()
+                .filter(trainerLogin -> trainerLogin.getEmailAddress().trim().equals(emailAddress))
+                .findAny()
+                .orElse(null);
     }
 
     public static TrainerLoginRepository  getRepository(){
@@ -20,24 +27,27 @@ public class TrainerLoginRepositoryImpl implements TrainerLoginRepository {
     }
 
     public TrainerLogin create(TrainerLogin trainerLogin){
-        this.trainerLogin.put(trainerLogin.getEmailAddress(),trainerLogin);
+        this.trainerLogin.add(trainerLogin);
         return trainerLogin;
     }
     public TrainerLogin read(String emailAddress){
-        return this.trainerLogin.get(emailAddress);
+        TrainerLogin trainerLogin = findEmailAddress(emailAddress);
+        return trainerLogin;
     }
     public TrainerLogin update(TrainerLogin trainerLogin){
-        this.trainerLogin.replace(trainerLogin.getEmailAddress(),trainerLogin);
-        return this.trainerLogin.get(trainerLogin.getEmailAddress());
+        TrainerLogin toDelete = findEmailAddress(trainerLogin.getEmailAddress());
+        if(toDelete != null) {
+            this.trainerLogin.remove(toDelete);
+            return create(trainerLogin);
+        }
+        return null;
     }
     public void delete(String emailAddress){
-        this.trainerLogin.remove(emailAddress);
+        TrainerLogin trainerLogin = findEmailAddress(emailAddress);
+        if (trainerLogin != null) this.trainerLogin.remove(emailAddress);
     }
 
     public Set<TrainerLogin>getAll(){
-        Collection<TrainerLogin> trainerLogin = this.trainerLogin.values();
-        Set<TrainerLogin> set = new HashSet<>();
-        set.addAll(trainerLogin);
-        return set;
+        return this.trainerLogin;
     }
 }

@@ -1,17 +1,24 @@
 package com.dean.repository.impl;
 
 import com.dean.domain.TrainerUpdateDetails;
+import com.dean.repository.TrainerUpdateDetailsRepository;
 
 import java.util.*;
 
 public class TrainerUpdateDetailsRepositoryImpl implements TrainerUpdateDetailsRepository {
 
     private static TrainerUpdateDetailsRepositoryImpl repository = null;
-    private Map<String,TrainerUpdateDetails> trainerUpdateDetails;
+    private Set<TrainerUpdateDetails> trainerUpdateDetails;
 
     private TrainerUpdateDetailsRepositoryImpl(){
 
-        this.trainerUpdateDetails = new HashMap<>();
+        this.trainerUpdateDetails = new HashSet<>();
+    }
+    private TrainerUpdateDetails findname(String name) {
+        return this.trainerUpdateDetails.stream()
+                .filter(trainerUpdateDetails -> trainerUpdateDetails.getName().trim().equals(name))
+                .findAny()
+                .orElse(null);
     }
 
     public static TrainerUpdateDetailsRepositoryImpl  getRepository(){
@@ -19,26 +26,28 @@ public class TrainerUpdateDetailsRepositoryImpl implements TrainerUpdateDetailsR
         return repository;
     }
     public TrainerUpdateDetails create(TrainerUpdateDetails trainerUpdateDetails){
-        this.trainerUpdateDetails.put(trainerUpdateDetails.getName(),trainerUpdateDetails);
+        this.trainerUpdateDetails.add(trainerUpdateDetails);
         return trainerUpdateDetails;
     }
     public TrainerUpdateDetails read(String name){
-
-        return this.trainerUpdateDetails.get(name);
+        TrainerUpdateDetails trainerUpdateDetails = findname(name);
+        return trainerUpdateDetails;
     }
     public TrainerUpdateDetails update(TrainerUpdateDetails trainerUpdateDetails){
-        this.trainerUpdateDetails.replace(trainerUpdateDetails.getName(),trainerUpdateDetails);
-        return this.trainerUpdateDetails.get(trainerUpdateDetails.getName());
+        TrainerUpdateDetails toDelete = findname(trainerUpdateDetails.getName());
+        if(toDelete != null) {
+            this.trainerUpdateDetails.remove(toDelete);
+            return create(trainerUpdateDetails);
+        }
+        return null;
     }
     public void delete(String name){
-        this.trainerUpdateDetails.remove(name);
+        TrainerUpdateDetails trainerUpdateDetails = findname(name);
+        if (trainerUpdateDetails != null) this.trainerUpdateDetails.remove(name);
     }
 
     public Set<TrainerUpdateDetails>getAll(){
-        Collection<TrainerUpdateDetails> trainerUpdateDetails = this.trainerUpdateDetails.values();
-        Set<TrainerUpdateDetails> set = new HashSet<>();
-        set.addAll(trainerUpdateDetails);
-        return set;
+        return this.trainerUpdateDetails;
     }
 
 }

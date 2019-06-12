@@ -1,13 +1,8 @@
 package com.dean.factory;
 
-import com.dean.domain.GymMemeberRegistration;
-import com.dean.util.Misc;
+import com.dean.domain.GymMemberRegistration;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.Random;
-
-import static org.junit.Assert.*;
 
 public class GymMemberRegistrationFactoryTest {
 
@@ -20,7 +15,7 @@ public class GymMemberRegistrationFactoryTest {
 
 
 
-        GymMemeberRegistration g = GymMemberRegistrationFactory.getGymMemberRegistartion(name,surname,emailAddress,preferedSport);
+        GymMemberRegistration g = GymMemberRegistrationFactory.getGymMemberRegistartion(name,surname,emailAddress,preferedSport);
         System.out.println(g);
         Assert.assertNotNull(g.getPreferdSport());
     }

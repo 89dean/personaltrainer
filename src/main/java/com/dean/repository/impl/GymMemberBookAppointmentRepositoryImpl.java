@@ -1,17 +1,24 @@
 package com.dean.repository.impl;
 
 import com.dean.domain.GymMemberBookAppointment;
+import com.dean.repository.GymMemberBookAppointmentRepository;
 
 import java.util.*;
 
 public class GymMemberBookAppointmentRepositoryImpl implements GymMemberBookAppointmentRepository {
 
     private static GymMemberBookAppointmentRepositoryImpl repository = null;
-    private Map<String,GymMemberBookAppointment> gymMemberBookAppointment;
+    private Set<GymMemberBookAppointment> gymMemberBookAppointment;
 
     private GymMemberBookAppointmentRepositoryImpl(){
 
-        this.gymMemberBookAppointment = new HashMap<>();
+        this.gymMemberBookAppointment = new HashSet<>();
+    }
+    private GymMemberBookAppointment findname(String name) {
+        return this.gymMemberBookAppointment.stream()
+                .filter(gymMemberBookAppointment -> gymMemberBookAppointment.getName().trim().equals(name))
+                .findAny()
+                .orElse(null);
     }
 
     public static GymMemberBookAppointmentRepositoryImpl  getRepository(){
@@ -20,24 +27,27 @@ public class GymMemberBookAppointmentRepositoryImpl implements GymMemberBookAppo
     }
 
     public GymMemberBookAppointment create(GymMemberBookAppointment gymMemberBookAppointment){
-        this.gymMemberBookAppointment.put(gymMemberBookAppointment.getName(),gymMemberBookAppointment);
+        this.gymMemberBookAppointment.add(gymMemberBookAppointment);
         return gymMemberBookAppointment;
     }
     public GymMemberBookAppointment read(String name){
-        return this.gymMemberBookAppointment.get(name);
+        GymMemberBookAppointment gymMemberBookAppointment = findname(name);
+        return gymMemberBookAppointment;
     }
     public GymMemberBookAppointment update(GymMemberBookAppointment gymMemberBookAppointment){
-        this.gymMemberBookAppointment.replace(gymMemberBookAppointment.getName(),gymMemberBookAppointment);
-        return this.gymMemberBookAppointment.get(gymMemberBookAppointment.getName());
+        GymMemberBookAppointment toDelete = findname(gymMemberBookAppointment.getName());
+        if(toDelete != null) {
+            this.gymMemberBookAppointment.remove(toDelete);
+            return create(gymMemberBookAppointment);
+        }
+        return null;
     }
     public void delete(String name){
-        this.gymMemberBookAppointment.remove(name);
+        GymMemberBookAppointment gymMemberBookAppointment = findname(name);
+        if (gymMemberBookAppointment != null) this.gymMemberBookAppointment.remove(name);
     }
 
     public Set<GymMemberBookAppointment>getAll(){
-        Collection<GymMemberBookAppointment> gymMemberBookAppointments = this.gymMemberBookAppointment.values();
-        Set<GymMemberBookAppointment> set = new HashSet<>();
-        set.addAll(gymMemberBookAppointments);
-        return set;
+        return this.gymMemberBookAppointment;
     }
 }

@@ -1,17 +1,24 @@
 package com.dean.repository.impl;
 
 import com.dean.domain.CoachRegistration;
+import com.dean.repository.CoachRegistrationRepository;
 
 import java.util.*;
 
 public class CoachRegistrationRepositoryImpl implements CoachRegistrationRepository {
 
     private static CoachRegistrationRepositoryImpl repository = null;
-    private Map<String,CoachRegistration> coachRegistration;
+    private Set<CoachRegistration> coachRegistration;
 
     private CoachRegistrationRepositoryImpl(){
 
-        this.coachRegistration = new HashMap<>();
+        this.coachRegistration = new HashSet<>();
+    }
+    private CoachRegistration findId(String id) {
+        return this.coachRegistration.stream()
+                .filter(coachRegistration -> coachRegistration.getId().trim().equals(id))
+                .findAny()
+                .orElse(null);
     }
 
     public static CoachRegistrationRepositoryImpl  getRepository(){
@@ -20,25 +27,28 @@ public class CoachRegistrationRepositoryImpl implements CoachRegistrationReposit
     }
 
     public CoachRegistration create(CoachRegistration coachRegistration){
-        this.coachRegistration.put(coachRegistration.getId(),coachRegistration);
+        this.coachRegistration.add(coachRegistration);
         return coachRegistration;
     }
     public CoachRegistration read(String id){
-        return this.coachRegistration.get(id);
+        CoachRegistration coachRegistration = findId(id);
+        return coachRegistration;
     }
     public CoachRegistration update(CoachRegistration coachRegistration){
-        this.coachRegistration.replace(coachRegistration.getId(),coachRegistration);
-        return this.coachRegistration.get(coachRegistration.getId());
+        CoachRegistration toDelete = findId(coachRegistration.getId());
+        if(toDelete != null) {
+            this.coachRegistration.remove(toDelete);
+            return create(coachRegistration);
+        }
+        return null;
     }
     public void delete(String id){
-        this.coachRegistration.remove(id);
+        CoachRegistration coachRegistration = findId(id);
+        if (coachRegistration != null) this.coachRegistration.remove(id);
     }
 
     public Set<CoachRegistration>getAll(){
-        Collection<CoachRegistration> coachLogin = this.coachRegistration.values();
-        Set<CoachRegistration> set = new HashSet<>();
-        set.addAll(coachLogin);
-        return set;
+        return this.coachRegistration;
     }
 }
 

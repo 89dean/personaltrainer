@@ -1,17 +1,24 @@
 package com.dean.repository.impl;
 
 import com.dean.domain.GymMemberCancelation;
+import com.dean.repository.GymMemberCancelationRepository;
 
 import java.util.*;
 
 public class GymMemberCancelationRepositoryImpl implements GymMemberCancelationRepository {
 
     private static GymMemberCancelationRepositoryImpl repository = null;
-    private Map<String,GymMemberCancelation> gymMemberCancelation;
+    private Set<GymMemberCancelation> gymMemberCancelation;
 
     private GymMemberCancelationRepositoryImpl(){
 
-        this.gymMemberCancelation = new HashMap<>();
+        this.gymMemberCancelation = new HashSet<>();
+    }
+    private GymMemberCancelation findcancelmessage(String cancelmesssage) {
+        return this.gymMemberCancelation.stream()
+                .filter(gymMemberCancelation -> gymMemberCancelation.getCancelMessage().trim().equals(cancelmesssage))
+                .findAny()
+                .orElse(null);
     }
 
     public static GymMemberCancelationRepositoryImpl  getRepository(){
@@ -20,25 +27,28 @@ public class GymMemberCancelationRepositoryImpl implements GymMemberCancelationR
     }
 
     public GymMemberCancelation create(GymMemberCancelation gymMemberCancelation){
-        this.gymMemberCancelation.put(gymMemberCancelation.getCancelMessage(),gymMemberCancelation);
+        this.gymMemberCancelation.add(gymMemberCancelation);
         return gymMemberCancelation;
     }
     public GymMemberCancelation read(String message){
-        return this.gymMemberCancelation.get(message);
+        GymMemberCancelation gymMemberCancelation = findcancelmessage(message);
+        return gymMemberCancelation;
     }
     public GymMemberCancelation update(GymMemberCancelation gymMemberCancelation){
-        this.gymMemberCancelation.replace(gymMemberCancelation.getCancelMessage(),gymMemberCancelation);
-        return this.gymMemberCancelation.get(gymMemberCancelation.getCancelMessage());
+        GymMemberCancelation toDelete = findcancelmessage(gymMemberCancelation.getCancelMessage());
+        if(toDelete != null) {
+            this.gymMemberCancelation.remove(toDelete);
+            return create(gymMemberCancelation);
+        }
+        return null;
     }
     public void delete(String message){
-        this.gymMemberCancelation.remove(message);
+        GymMemberCancelation gymMemberCancelation = findcancelmessage(message);
+        if (gymMemberCancelation != null) this.gymMemberCancelation.remove(message);
     }
 
     public Set<GymMemberCancelation>getAll(){
-        Collection<GymMemberCancelation> gymMemberCancelation = this.gymMemberCancelation.values();
-        Set<GymMemberCancelation> set = new HashSet<>();
-        set.addAll(gymMemberCancelation);
-        return set;
+        return this.gymMemberCancelation;
     }
 
 

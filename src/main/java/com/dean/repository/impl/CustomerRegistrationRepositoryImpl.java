@@ -1,16 +1,24 @@
 package com.dean.repository.impl;
 
 import com.dean.domain.CustomerRegistration;
+import com.dean.repository.CustomerRegistrationRepository;
 
 import java.util.*;
 
 public class CustomerRegistrationRepositoryImpl implements CustomerRegistrationRepository {
 
     private static CustomerRegistrationRepositoryImpl repository = null;
-    private Map<String,CustomerRegistration> customerRegistration;
+    private Set<CustomerRegistration> customerRegistration;
 
     private CustomerRegistrationRepositoryImpl(){
-        this.customerRegistration = new HashMap<>();
+
+        this.customerRegistration = new HashSet<>();
+    }
+    private CustomerRegistration findId(String id) {
+        return this.customerRegistration.stream()
+                .filter(customerRegistration -> customerRegistration.getEmailAddress().trim().equals(id))
+                .findAny()
+                .orElse(null);
     }
 
     public static CustomerRegistrationRepositoryImpl  getRepository(){
@@ -19,25 +27,29 @@ public class CustomerRegistrationRepositoryImpl implements CustomerRegistrationR
     }
 
     public CustomerRegistration create(CustomerRegistration customerRegistration){
-        this.customerRegistration.put(customerRegistration.getId(),customerRegistration);
+        this.customerRegistration.add(customerRegistration);
         return customerRegistration;
     }
     public CustomerRegistration read(String id){
-        return this.customerRegistration.get(id);
+
+        CustomerRegistration customerRegistration = findId(id);
+        return customerRegistration;
     }
     public CustomerRegistration update(CustomerRegistration customerRegistration){
-        this.customerRegistration.replace(customerRegistration.getId(),customerRegistration);
-        return this.customerRegistration.get(customerRegistration.getId());
+        CustomerRegistration toDelete = findId(customerRegistration.getId());
+        if(toDelete != null) {
+            this.customerRegistration.remove(toDelete);
+            return create(customerRegistration);
+        }
+        return null;
     }
     public void delete(String id){
-        this.customerRegistration.remove(id);
+        CustomerRegistration customerRegistration = findId(id);
+        if (customerRegistration != null) this.customerRegistration.remove(id);
     }
 
     public Set<CustomerRegistration>getAll(){
-        Collection<CustomerRegistration> customerRegistration = this.customerRegistration.values();
-        Set<CustomerRegistration> set = new HashSet<>();
-        set.addAll(customerRegistration);
-        return set;
+        return this.customerRegistration;
     }
 
 }

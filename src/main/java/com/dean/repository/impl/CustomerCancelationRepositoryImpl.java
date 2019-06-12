@@ -1,17 +1,24 @@
 package com.dean.repository.impl;
 
 import com.dean.domain.CustomerCancelation;
+import com.dean.repository.CustomerCancelationRepository;
 
 import java.util.*;
 
 public class CustomerCancelationRepositoryImpl implements CustomerCancelationRepository {
 
     private static CustomerCancelationRepositoryImpl repository = null;
-    private Map<String,CustomerCancelation> customerCancelation;
+    private Set<CustomerCancelation> customerCancelation;
 
     private CustomerCancelationRepositoryImpl(){
 
-        this.customerCancelation = new HashMap<>();
+        this.customerCancelation = new HashSet<>();
+    }
+    private CustomerCancelation findCancelMessage(String message) {
+        return this.customerCancelation.stream()
+                .filter(customerCancelation -> customerCancelation.getCancelMessage().trim().equals(message))
+                .findAny()
+                .orElse(null);
     }
 
     public static CustomerCancelationRepositoryImpl  getRepository(){
@@ -20,24 +27,27 @@ public class CustomerCancelationRepositoryImpl implements CustomerCancelationRep
     }
 
     public CustomerCancelation create(CustomerCancelation customerCancelation){
-        this.customerCancelation.put(customerCancelation.getCancelMessage(),customerCancelation);
+        this.customerCancelation.add(customerCancelation);
         return customerCancelation;
     }
     public CustomerCancelation read(String name){
-        return this.customerCancelation.get(name);
+        CustomerCancelation customerCancelation = findCancelMessage(name);
+        return customerCancelation;
     }
     public CustomerCancelation update(CustomerCancelation customerCancelation){
-        this.customerCancelation.replace(customerCancelation.getCancelMessage(),customerCancelation);
-        return this.customerCancelation.get(customerCancelation.getCancelMessage());
+        CustomerCancelation toDelete = findCancelMessage(customerCancelation.getCancelMessage());
+        if(toDelete != null) {
+            this.customerCancelation.remove(toDelete);
+            return create(customerCancelation);
+        }
+        return null;
     }
     public void delete(String message){
-        this.customerCancelation.remove(message);
+        CustomerCancelation customerCancelation = findCancelMessage(message);
+        if (customerCancelation != null) this.customerCancelation.remove(message);
     }
 
     public Set<CustomerCancelation>getAll(){
-        Collection<CustomerCancelation> customerCancelations = this.customerCancelation.values();
-        Set<CustomerCancelation> set = new HashSet<>();
-        set.addAll(customerCancelations);
-        return set;
+        return this.customerCancelation;
     }
 }

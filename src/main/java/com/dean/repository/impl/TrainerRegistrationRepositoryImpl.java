@@ -1,16 +1,24 @@
 package com.dean.repository.impl;
 
 import com.dean.domain.TrainerRegistration;
+import com.dean.repository.TrainerRegistrationRepository;
 
 import java.util.*;
 
 public class TrainerRegistrationRepositoryImpl implements TrainerRegistrationRepository {
 
     private static TrainerRegistrationRepositoryImpl repository = null;
-    private Map<String,TrainerRegistration> trainerRegistration;
+    private Set<TrainerRegistration> trainerRegistration;
 
     private TrainerRegistrationRepositoryImpl(){
-        this.trainerRegistration = new HashMap<>();
+
+        this.trainerRegistration = new HashSet<>();
+    }
+    private TrainerRegistration findid(String id) {
+        return this.trainerRegistration.stream()
+                .filter(trainerRegistration -> trainerRegistration.getId().trim().equals(id))
+                .findAny()
+                .orElse(null);
     }
 
     public static TrainerRegistrationRepositoryImpl  getRepository(){
@@ -19,24 +27,27 @@ public class TrainerRegistrationRepositoryImpl implements TrainerRegistrationRep
     }
 
     public TrainerRegistration create(TrainerRegistration trainerRegistration){
-        this.trainerRegistration.put(trainerRegistration.getId(),trainerRegistration);
+        this.trainerRegistration.add(trainerRegistration);
         return trainerRegistration;
     }
     public TrainerRegistration read(String id){
-        return this.trainerRegistration.get(id);
+        TrainerRegistration trainerRegistration = findid(id);
+        return trainerRegistration;
     }
     public TrainerRegistration update(TrainerRegistration trainerRegistration){
-        this.trainerRegistration.replace(trainerRegistration.getId(),trainerRegistration);
-        return this.trainerRegistration.get(trainerRegistration.getId());
+        TrainerRegistration toDelete = findid(trainerRegistration.getEmailAddress());
+        if(toDelete != null) {
+            this.trainerRegistration.remove(toDelete);
+            return create(trainerRegistration);
+        }
+        return null;
     }
     public void delete(String id){
-        this.trainerRegistration.remove(id);
+        TrainerRegistration trainerRegistration = findid(id);
+        if (trainerRegistration != null) this.trainerRegistration.remove(id);
     }
 
     public Set<TrainerRegistration>getAll(){
-        Collection<TrainerRegistration> trainerRegistration = this.trainerRegistration.values();
-        Set<TrainerRegistration> set = new HashSet<>();
-        set.addAll(trainerRegistration);
-        return set;
+        return this.trainerRegistration;
     }
 }

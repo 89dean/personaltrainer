@@ -1,17 +1,24 @@
 package com.dean.repository.impl;
 
 import com.dean.domain.GymMemberUpdateDetails;
+import com.dean.repository.GymMemberUpdateDetailsRepository;
 
 import java.util.*;
 
 public class GymMemberUpdateDetailsRepositoryImpl implements GymMemberUpdateDetailsRepository {
 
     private static GymMemberUpdateDetailsRepositoryImpl repository = null;
-    private Map<String,GymMemberUpdateDetails> gymMemberUpdateDetails;
+    private Set<GymMemberUpdateDetails> gymMemberUpdateDetails;
 
     private GymMemberUpdateDetailsRepositoryImpl(){
 
-        this.gymMemberUpdateDetails = new HashMap<>();
+        this.gymMemberUpdateDetails = new HashSet<>();
+    }
+    private GymMemberUpdateDetails finadname(String name) {
+        return this.gymMemberUpdateDetails.stream()
+                .filter(gymMemberUpdateDetails -> gymMemberUpdateDetails.getName().trim().equals(name))
+                .findAny()
+                .orElse(null);
     }
 
     public static GymMemberUpdateDetailsRepositoryImpl  getRepository(){
@@ -20,24 +27,28 @@ public class GymMemberUpdateDetailsRepositoryImpl implements GymMemberUpdateDeta
     }
 
     public GymMemberUpdateDetails create(GymMemberUpdateDetails gymMemberUpdateDetails){
-        this.gymMemberUpdateDetails.put(gymMemberUpdateDetails.getName(),gymMemberUpdateDetails);
+        this.gymMemberUpdateDetails.add(gymMemberUpdateDetails);
         return gymMemberUpdateDetails;
     }
     public GymMemberUpdateDetails read(String name){
-        return this.gymMemberUpdateDetails.get(name);
+        GymMemberUpdateDetails gymMemberUpdateDetails = finadname(name);
+        return gymMemberUpdateDetails;
     }
     public GymMemberUpdateDetails update(GymMemberUpdateDetails gymMemberUpdateDetails){
-        this.gymMemberUpdateDetails.replace(gymMemberUpdateDetails.getName(),gymMemberUpdateDetails);
-        return this.gymMemberUpdateDetails.get(gymMemberUpdateDetails.getName());
+        GymMemberUpdateDetails toDelete = finadname(gymMemberUpdateDetails.getName());
+        if(toDelete != null) {
+            this.gymMemberUpdateDetails.remove(toDelete);
+            return create(gymMemberUpdateDetails);
+        }
+        return null;
+
     }
     public void delete(String name){
-        this.gymMemberUpdateDetails.remove(name);
+        GymMemberUpdateDetails gymMemberUpdateDetails = finadname(name);
+        if (gymMemberUpdateDetails != null) this.gymMemberUpdateDetails.remove(name);
     }
 
     public Set<GymMemberUpdateDetails>getAll(){
-        Collection<GymMemberUpdateDetails> gymMemberUpdateDetails = this.gymMemberUpdateDetails.values();
-        Set<GymMemberUpdateDetails> set = new HashSet<>();
-        set.addAll(gymMemberUpdateDetails);
-        return set;
+        return this.gymMemberUpdateDetails;
     }
 }
