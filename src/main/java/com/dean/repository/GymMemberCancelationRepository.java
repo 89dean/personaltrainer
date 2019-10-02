@@ -2,9 +2,13 @@ package com.dean.repository;
 
 import com.dean.domain.GymMemberCancelation;
 import com.dean.repository.IRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.Set;
 
-public interface GymMemberCancelationRepository extends IRepository<GymMemberCancelation,String> {
-    Set<GymMemberCancelation> getAll();
+@Repository
+public interface GymMemberCancelationRepository extends JpaRepository<GymMemberCancelation,String> {
+//    Collection<GymMemberCancelation> getAll();
 }

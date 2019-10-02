@@ -1,53 +1,44 @@
-package com.dean.repository.impl;
-
-import com.dean.domain.GymMemberResetPassword;
-import com.dean.repository.GymMemberResetPasswordRepository;
-
-import java.util.*;
-
-public class GymMemberResetPasswordRepositoryImpl implements GymMemberResetPasswordRepository {
-
-    private static GymMemberResetPasswordRepositoryImpl repository = null;
-    private Set<GymMemberResetPassword> gymMemberResetPassword;
-
-    private GymMemberResetPasswordRepositoryImpl(){
-
-        this.gymMemberResetPassword = new HashSet<>();
-    }
-    private GymMemberResetPassword findEmailAddress(String emailAddress) {
-        return this.gymMemberResetPassword.stream()
-                .filter(gymMemberResetPassword -> gymMemberResetPassword.getEmailAddress().trim().equals(emailAddress))
-                .findAny()
-                .orElse(null);
-    }
-
-    public static GymMemberResetPasswordRepositoryImpl  getRepository(){
-        if (repository==null)repository = new GymMemberResetPasswordRepositoryImpl();
-        return repository;
-    }
-
-    public GymMemberResetPassword create(GymMemberResetPassword gymMemberResetPassword){
-        this.gymMemberResetPassword.add(gymMemberResetPassword);
-        return gymMemberResetPassword;
-    }
-    public GymMemberResetPassword read(String emailAddress){
-        GymMemberResetPassword gymMemberResetPassword = findEmailAddress(emailAddress);
-        return gymMemberResetPassword;
-    }
-    public GymMemberResetPassword update(GymMemberResetPassword gymMemberResetPassword){
-        GymMemberResetPassword toDelete = findEmailAddress(gymMemberResetPassword.getEmailAddress());
-        if(toDelete != null) {
-            this.gymMemberResetPassword.remove(toDelete);
-            return create(gymMemberResetPassword);
-        }
-        return null;
-    }
-    public void delete(String emailAddress){
-        GymMemberResetPassword coachResetPassword = findEmailAddress(emailAddress);
-        if (coachResetPassword != null) this.gymMemberResetPassword.remove(emailAddress);
-    }
-
-    public Set<GymMemberResetPassword>getAll(){
-        return this.gymMemberResetPassword;
-    }
-}
+//package com.dean.repository.impl;
+//
+//import com.dean.domain.CoachAcceptance;
+//import com.dean.domain.GymMemberResetPassword;
+//import com.dean.repository.GymMemberResetPasswordRepository;
+//
+//import java.util.*;
+//
+//public class GymMemberResetPasswordRepositoryImpl implements GymMemberResetPasswordRepository {
+//
+//    private static GymMemberResetPasswordRepositoryImpl repository = null;
+//    private Map<String,GymMemberResetPassword> map = new HashMap<>();
+//
+//
+//    public static GymMemberResetPasswordRepository  getRepository(){
+//        if (repository==null) repository = new GymMemberResetPasswordRepositoryImpl();
+//        return repository;
+//    }
+//    public Collection<GymMemberResetPassword>getAll(){
+//        return map.values();
+//    }
+//
+//    public GymMemberResetPassword create(String c, GymMemberResetPassword gymMemberResetPassword){
+//        map.put(c,gymMemberResetPassword);
+//        return gymMemberResetPassword;
+//
+//    }
+//    public GymMemberResetPassword read(String id){
+//        return map.get(id);
+//    }
+//    public GymMemberResetPassword update(String c, GymMemberResetPassword gymMemberResetPassword){
+//        map.remove(c);
+//        map.put(c,gymMemberResetPassword);
+//        return gymMemberResetPassword;
+//
+//    }
+//
+//    public GymMemberResetPassword delete(String id){
+//        if(map.containsKey(id)){
+//            map.remove(id);
+//        }
+//        return map.remove(id);
+//    }
+//}

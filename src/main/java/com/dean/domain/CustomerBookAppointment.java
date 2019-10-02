@@ -1,18 +1,36 @@
 package com.dean.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
-public class CustomerBookAppointment implements Comparable<CustomerBookAppointment> {
-    private String name,surname,title,time;
+@Entity
+@Table(name = "Coach Update Details")
+public class CustomerBookAppointment {
+    @Id
+    private String appointmentId;
+    @Column(name = "Name")
+    private String name;
+    @Column(name = "Surname")
+    private String surname;
+    @Column(name = "Tile")
+    private String title;
+    @Column(name = "Time")
+    private String time;
 
     private CustomerBookAppointment(){}
 
     private CustomerBookAppointment(Builder builder){
+        this.appointmentId=builder.appointmentId;
         this.name=builder.name;
         this.surname=builder.surname;
         this.title=builder.title;
         this.time=builder.time;
     }
+    public String getAppointmentId(){return appointmentId;}
+
     public String getName(){return name;}
 
     public String getSurname(){return surname;}
@@ -21,14 +39,14 @@ public class CustomerBookAppointment implements Comparable<CustomerBookAppointme
 
     public String getTime(){return time;}
 
-    @Override
-    public int compareTo(CustomerBookAppointment o) {
-        return this.name.compareTo(o.name);
-    }
 
     public static class Builder{
-        private String name,surname,title,time;
+        private String name,surname,title,time,appointmentId;
 
+        public Builder appointmentId(String id){
+            this.appointmentId=id;
+            return this;
+        }
         public Builder name(String name){
             this.name=name;
             return this;
@@ -64,19 +82,7 @@ public class CustomerBookAppointment implements Comparable<CustomerBookAppointme
                 ", surname='" + surname + '\'' +
                 ", title='" + title + '\'' +
                 ", time='" + time + '\'' +
+                ", appointmentId='" + appointmentId + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CustomerBookAppointment that = (CustomerBookAppointment) o;
-        return name.equals(that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
     }
 }

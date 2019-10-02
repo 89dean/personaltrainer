@@ -1,8 +1,17 @@
 package com.dean.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
-public class TrainerResetPassword implements Comparable<TrainerResetPassword> {
+@Entity
+@Table(name = "Trainer Reset Password")
+public class TrainerResetPassword  {
+    @Id
+    private String passwordId;
+    @Column(name = "Email")
     private String emailAddress;
 
     private TrainerResetPassword(){}
@@ -11,16 +20,21 @@ public class TrainerResetPassword implements Comparable<TrainerResetPassword> {
         this.emailAddress = builder.emailAddress;
 
     }
-    public String getEmailAddress(){return emailAddress;}
 
-    @Override
-    public int compareTo(TrainerResetPassword o) {
-        return this.emailAddress.compareTo(o.emailAddress);
+    public String getPasswordId() {
+        return passwordId;
     }
 
-    public static class Builder{
-        private String emailAddress;
+    public String getEmailAddress(){return emailAddress;}
 
+
+    public static class Builder{
+        private String emailAddress,passwordId;
+
+        public Builder passwordId(String id){
+            this.passwordId = id;
+            return this;
+        }
         public Builder emailAddress(String emailAddress){
             this.emailAddress = emailAddress;
             return this;
@@ -39,19 +53,7 @@ public class TrainerResetPassword implements Comparable<TrainerResetPassword> {
     public String toString() {
         return "TrainerResetPassword{" +
                 "emailAddress='" + emailAddress + '\'' +
+                ", passwordId='" + passwordId + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TrainerResetPassword that = (TrainerResetPassword) o;
-        return emailAddress.equals(that.emailAddress);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(emailAddress);
     }
 }

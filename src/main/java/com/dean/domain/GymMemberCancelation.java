@@ -1,32 +1,51 @@
 package com.dean.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
-public class GymMemberCancelation implements Comparable<GymMemberCancelation>{
-    private String name,surname,cancelMessage;
+@Entity
+@Table(name = "Member Cancelation")
+public class GymMemberCancelation {
+    @Id
+    private String cancelationId;
+    @Column(name = "Name")
+    private String name;
+    @Column(name = "Surname")
+    private String surname;
+    @Column(name = "Message")
+    private String cancelMessage;
 
     private GymMemberCancelation(){}
 
     private GymMemberCancelation(Builder builder){
+        this.cancelationId=builder.cancelationId;
         this.name=builder.name;
         this.surname=builder.surname;
         this.cancelMessage=builder.cancelMessage;
 
     }
+
+    public String getCancelationId() {
+        return cancelationId;
+    }
+
     public String getName(){return name;}
 
     public String getSurname(){return surname;}
 
     public String getCancelMessage(){return cancelMessage;}
 
-    @Override
-    public int compareTo(GymMemberCancelation o) {
-        return this.name.compareTo(o.name);
-    }
 
     public static class Builder{
-        private String name,surname,cancelMessage;
+        private String name,surname,cancelMessage,cancelationId;
 
+        public Builder cancelationId(String id){
+            this.cancelationId=id;
+            return this;
+        }
         public Builder name(String name){
             this.name=name;
             return this;
@@ -40,6 +59,7 @@ public class GymMemberCancelation implements Comparable<GymMemberCancelation>{
             return this;
         }
         public Builder Copy(GymMemberCancelation gymMemberCancelation){
+            this.cancelationId = gymMemberCancelation.cancelationId;
             this.cancelMessage = gymMemberCancelation.cancelMessage;
             this.name = gymMemberCancelation.name;
             this.surname = gymMemberCancelation.surname;
@@ -55,19 +75,7 @@ public class GymMemberCancelation implements Comparable<GymMemberCancelation>{
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", cancelMessage='" + cancelMessage + '\'' +
+                ", cancelationId='" + cancelationId + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GymMemberCancelation that = (GymMemberCancelation) o;
-        return name.equals(that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
     }
 }

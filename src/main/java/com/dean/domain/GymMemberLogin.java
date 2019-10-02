@@ -1,14 +1,26 @@
 package com.dean.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
-public class GymMemberLogin implements Comparable<GymMemberLogin> {
-    private String emailAddress,password;
+@Entity
+@Table(name = "Member Login")
+public class GymMemberLogin {
+    @Id
+    private String loginId;
+    @Column(name = "Email")
+    private String emailAddress;
+    @Column(name = "Password")
+    private String password;
 
 
     private GymMemberLogin(){}
 
     private GymMemberLogin(Builder builder){
+        this.loginId=builder.loginId;
         this.emailAddress=builder.emailAddress;
         this.password=builder.password;
 
@@ -17,14 +29,13 @@ public class GymMemberLogin implements Comparable<GymMemberLogin> {
 
     public String getPassword(){return password;}
 
-    @Override
-    public int compareTo(GymMemberLogin o) {
-        return this.emailAddress.compareTo(o.emailAddress);
-    }
-
     public static class Builder{
-        private String emailAddress,password;
+        private String emailAddress,password,loginId;
 
+        public Builder loginId(String id){
+            this.loginId= loginId;
+            return this;
+        }
         public Builder emailAddress(String emailAddress){
             this.emailAddress=emailAddress;
             return this;
@@ -34,6 +45,7 @@ public class GymMemberLogin implements Comparable<GymMemberLogin> {
             return this;
         }
         public Builder Copy(GymMemberLogin gymMemberLogin){
+            this.loginId = gymMemberLogin.loginId;
             this.emailAddress = gymMemberLogin.emailAddress;
             this.password = gymMemberLogin.password;
 
@@ -47,19 +59,7 @@ public class GymMemberLogin implements Comparable<GymMemberLogin> {
         return "GymMemberLogin{" +
                 "emailAddress='" + emailAddress + '\'' +
                 ", password='" + password + '\'' +
+                ", loginId='" + loginId + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GymMemberLogin that = (GymMemberLogin) o;
-        return emailAddress.equals(that.emailAddress);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(emailAddress);
     }
 }

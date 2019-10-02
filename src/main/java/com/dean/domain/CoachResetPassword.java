@@ -1,8 +1,17 @@
 package com.dean.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
-public class CoachResetPassword implements Comparable<CoachResetPassword> {
+@Entity
+@Table(name = "Coach Reset Password")
+public class CoachResetPassword {
+    @Id
+    private String resetId;
+    @Column(name = "Email")
     private String emailAddress;
 
 
@@ -12,21 +21,24 @@ public class CoachResetPassword implements Comparable<CoachResetPassword> {
         this.emailAddress = builder.emailAddress;
 
     }
+    public String getResetId(){return resetId;}
+
     public String getEmailAddress(){return emailAddress;}
 
-    @Override
-    public int compareTo(CoachResetPassword o) {
-        return this.emailAddress.compareTo(o.emailAddress);
-    }
 
     public static class Builder{
-        private String emailAddress;
+        private String emailAddress,resetId;
 
+        public Builder resetId(String id){
+            this.resetId = id;
+            return this;
+        }
         public Builder emailAddress(String emailAddress){
             this.emailAddress = emailAddress;
             return this;
         }
         public Builder Copy(CoachResetPassword coachResetPassword){
+            this.resetId = coachResetPassword.resetId;
             this.emailAddress = coachResetPassword.emailAddress;
 
             return this;
@@ -40,19 +52,7 @@ public class CoachResetPassword implements Comparable<CoachResetPassword> {
     public String toString() {
         return "CoachResetPassword{" +
                 "emailAddress='" + emailAddress + '\'' +
+                ", resetId='" + resetId + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CoachResetPassword that = (CoachResetPassword) o;
-        return emailAddress.equals(that.emailAddress);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(emailAddress);
     }
 }

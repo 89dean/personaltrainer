@@ -1,9 +1,22 @@
 package com.dean.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
-public class CoachRegistration implements Comparable<CoachRegistration>{
-    private String name,surname,emailAddress,id;
+@Entity
+@Table(name = "Coach Registration")
+public class CoachRegistration{
+    @Id
+    private String registrationId;
+    @Column(name = "Name")
+    private String name;
+    @Column(name= "Surname")
+    private String surname;
+    @Column(name = "Email")
+    private String emailAddress;
 
     private CoachRegistration(){}
 
@@ -11,7 +24,7 @@ public class CoachRegistration implements Comparable<CoachRegistration>{
         this.name = builder.name;
         this.surname = builder.surname;
         this.emailAddress = builder.emailAddress;
-        this.id = builder.id;
+        this.registrationId = builder.registrationId;
     }
 
     public String getName() {
@@ -26,16 +39,11 @@ public class CoachRegistration implements Comparable<CoachRegistration>{
         return emailAddress;
     }
 
-    public String getId(){return id;}
-
-    @Override
-    public int compareTo(CoachRegistration o) {
-        return this.id.compareTo(o.id);
-    }
+    public String getRegistrationId(){return registrationId;}
 
 
     public static class Builder{
-        private String name,surname,emailAddress,id;
+        private String name,surname,emailAddress,registrationId;
 
         public Builder name(String name){
             this.name = name;
@@ -49,12 +57,12 @@ public class CoachRegistration implements Comparable<CoachRegistration>{
             this.emailAddress = emailAddress;
             return this;
         }
-        public Builder id(String id){
-            this.id = id;
+        public Builder registrationId(String id){
+            this.registrationId = id;
             return this;
         }
         public Builder Copy(CoachRegistration coachRegistration){
-            this.id = coachRegistration.id;
+            this.registrationId = coachRegistration.registrationId;
             this.name = coachRegistration.name;
             this.surname = coachRegistration.surname;
             this.emailAddress = coachRegistration.emailAddress;
@@ -72,20 +80,7 @@ public class CoachRegistration implements Comparable<CoachRegistration>{
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
-                ", id='" + id + '\'' +
+                ", id='" + registrationId + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CoachRegistration that = (CoachRegistration) o;
-        return id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

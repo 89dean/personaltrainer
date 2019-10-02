@@ -2,9 +2,13 @@ package com.dean.repository;
 
 import com.dean.domain.CoachUpdateDetails;
 import com.dean.repository.IRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.Set;
 
-public interface CoachUpdateDetailsRepository extends IRepository<CoachUpdateDetails,String> {
-    Set<CoachUpdateDetails>getAll();
+@Repository
+public interface CoachUpdateDetailsRepository extends JpaRepository<CoachUpdateDetails,String> {
+//    Collection<CoachUpdateDetails> getAll();
 }

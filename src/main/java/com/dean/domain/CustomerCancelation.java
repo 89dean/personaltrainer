@@ -1,31 +1,50 @@
 package com.dean.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
-public class CustomerCancelation implements Comparable<CustomerCancelation>{
-    private String name,surname,cancelMessage;
+
+@Entity
+@Table(name = "Customer Cancelation")
+public class CustomerCancelation {
+    @Id
+    private String cancelationId;
+    @Column(name = "Name")
+    private String name;
+    @Column(name = "Surname")
+    private String surname;
+    @Column(name = "Cancel")
+    private String cancelMessage;
+
 
     private CustomerCancelation(){}
 
     private CustomerCancelation(Builder builder){
+        this.cancelationId=builder.cancelationId;
         this.name=builder.name;
         this.surname=builder.surname;
         this.cancelMessage=builder.cancelMessage;
 
     }
+    public String getCancelationId(){return cancelationId;}
+
     public String getName(){return name;}
 
     public String getSurname(){return surname;}
 
     public String getCancelMessage(){return cancelMessage;}
 
-    @Override
-    public int compareTo(CustomerCancelation o) {
-        return this.cancelMessage.compareTo(o.cancelMessage);
-    }
 
     public static class Builder {
-        private String name, surname, cancelMessage;
+        private String name, surname, cancelMessage,cancelationId;
+
+        public Builder cancelationId(String id) {
+            this.cancelationId = id;
+            return this;
+        }
 
         public Builder name(String name) {
             this.name = name;
@@ -60,19 +79,8 @@ public class CustomerCancelation implements Comparable<CustomerCancelation>{
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", cancelMessage='" + cancelMessage + '\'' +
+                ", cancelationId='" + cancelationId + '\'' +
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CustomerCancelation that = (CustomerCancelation) o;
-        return cancelMessage.equals(that.cancelMessage);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cancelMessage);
-    }
 }

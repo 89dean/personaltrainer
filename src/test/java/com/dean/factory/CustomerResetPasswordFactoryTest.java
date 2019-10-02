@@ -8,12 +8,12 @@ import static org.junit.Assert.*;
 
 public class CustomerResetPasswordFactoryTest {
 
-    @Test
-    public void getCustomerResetPassword() {
-        String emailAdress="dean.february3@gmail.com";
-
-        CustomerResetPassword c = CustomerResetPasswordFactory.getCustomerResetPassword(emailAdress);
-        System.out.println(c);
-        Assert.assertNotNull(c.getEmailAddress());
-    }
+//    @Test
+//    public void getCustomerResetPassword() {
+//        String emailAdress="dean.february3@gmail.com";
+//
+//        CustomerResetPassword c = CustomerResetPasswordFactory.getCustomerResetPassword(emailAdress);
+//        System.out.println(c);
+//        Assert.assertNotNull(c.getEmailAddress());
+//    }
 }

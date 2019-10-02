@@ -1,56 +1,61 @@
-package com.dean.repository.impl;
-
-import com.dean.domain.CoachLogin;
-import com.dean.repository.CoachLoginRepository;
-
-import java.util.*;
-
-public class CoachLoginRepositoryImpl implements CoachLoginRepository {
-
-    private static CoachLoginRepositoryImpl repository = null;
-     private Set<CoachLogin> coachLogin;
-
-
-    private CoachLoginRepositoryImpl(){
-
-        this.coachLogin = new HashSet<>();
-    }
-    private CoachLogin findEmailAddress(String emailaddress) {
-        return this.coachLogin.stream()
-                .filter(coachLogin -> coachLogin.getEmailAddress().trim().equals(emailaddress))
-                .findAny()
-                .orElse(null);
-    }
-
-    public static CoachLoginRepository  getRepository(){
-        if (repository==null)repository = new CoachLoginRepositoryImpl();
-        return repository;
-    }
-
-    public CoachLogin create(CoachLogin coachLogin){
-        this.coachLogin.add(coachLogin);
-        return coachLogin;
-    }
-    public CoachLogin read(final String emailAddress){
-        CoachLogin coachLogin = findEmailAddress(emailAddress);
-        return coachLogin;
-    }
-
-    public CoachLogin update(CoachLogin coachLogin){
-        CoachLogin toDelete = findEmailAddress(coachLogin.getEmailAddress());
-        if(toDelete != null) {
-            this.coachLogin.remove(toDelete);
-            return create(coachLogin);
-        }
-        return null;
-    }
-    public void delete(String emailAddress){
-
-        CoachLogin coachAcceptance = findEmailAddress(emailAddress);
-        if (coachAcceptance != null) this.coachLogin.remove(emailAddress);
-    }
-
-    public Set<CoachLogin>getAll(){
-        return this.coachLogin;
-    }
-}
+//package com.dean.repository.impl;
+//
+//import com.dean.domain.CoachAcceptance;
+//import com.dean.domain.CoachLogin;
+//import com.dean.repository.CoachLoginRepository;
+//
+//import java.util.*;
+//
+//public class CoachLoginRepositoryImpl implements CoachLoginRepository {
+//
+//    private static CoachLoginRepository coachLoginRepository;
+//    private Set<CoachLogin> loginDB;
+//
+//    private CoachLoginRepositoryImpl() {
+//        this.loginDB = new HashSet<>();
+//    }
+//
+//    public static CoachLoginRepository getCoachLoginRepository() {
+//        if (coachLoginRepository == null) coachLoginRepository = new CoachLoginRepositoryImpl();
+//        return coachLoginRepository;
+//    }
+//
+//    @Override
+//    public CoachLogin create(String s, CoachLogin coachLogin) {
+//        this.loginDB.add(coachLogin);
+//        return coachLogin;
+//    }
+//
+//    @Override
+//    public CoachLogin read(String s) {
+//        return this.loginDB.stream().filter(coachLogin -> coachLogin.getLoginId().equalsIgnoreCase(s)).findAny().orElse(null);
+//    }
+//
+//    @Override
+//    public CoachLogin update(String s, CoachLogin coachLogin) {
+//        CoachLogin g = read(coachLogin.getLoginId());
+//        if (g != null) {
+//            delete(g.getLoginId());
+//            return create(s, coachLogin);
+//        }
+//        return null;
+//    }
+//
+//    @Override
+//    public CoachLogin delete(String s) {
+//        CoachLogin coachLogin = read(s);
+//        this.loginDB.remove(coachLogin);
+//        return coachLogin;
+//    }
+//
+//    @Override
+//    public CoachLogin retrieveByDesc(String loginDesc) {
+//        return this.loginDB.stream().filter(coachLogin -> coachLogin.getEmailAddress().equalsIgnoreCase(loginDesc)).findAny().orElse(null);
+//    }
+//
+//    @Override
+//    public Set<CoachLogin> getAll() {
+//        return this.loginDB;
+//        }
+//
+//        }

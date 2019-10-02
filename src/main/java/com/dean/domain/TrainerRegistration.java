@@ -1,18 +1,36 @@
 package com.dean.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
-public class TrainerRegistration implements Comparable<TrainerRegistration> {
-    private String name,surname,emailAddress,id;
+@Entity
+@Table(name = "Trainer Registration")
+public class TrainerRegistration {
+    @Id
+    private String registrationId;
+    @Column(name = "Name")
+    private String name;
+    @Column(name= "Surname")
+    private String surname;
+    @Column(name = "Email")
+    private String emailAddress;
 
     private TrainerRegistration(){}
 
     private TrainerRegistration(Builder builder){
+        this.registrationId = builder.registrationId;
         this.name = builder.name;
         this.surname = builder.surname;
         this.emailAddress = builder.emailAddress;
-        this.id = builder.id;
 
+
+    }
+
+    public String getRegistrationId() {
+        return registrationId;
     }
 
     public String getName() {
@@ -27,16 +45,16 @@ public class TrainerRegistration implements Comparable<TrainerRegistration> {
         return emailAddress;
     }
 
-    public String getId(){return id;}
 
-    @Override
-    public int compareTo(TrainerRegistration o) {
-        return this.id.compareTo(o.id);
-    }
+
 
     public static class Builder{
-        private String name,surname,emailAddress,id;
+        private String name,surname,emailAddress,registrationId;
 
+        public Builder registrationId(String id){
+            this.registrationId = id;
+            return this;
+        }
         public Builder name(String name){
             this.name = name;
             return this;
@@ -49,12 +67,9 @@ public class TrainerRegistration implements Comparable<TrainerRegistration> {
             this.emailAddress = emailAddress;
             return this;
         }
-        public Builder id(String id){
-            this.id = id;
-            return this;
-        }
+
         public Builder Copy(TrainerRegistration trainerRegistration){
-            this.id = trainerRegistration.id;
+            this.registrationId = trainerRegistration.registrationId;
             this.name = trainerRegistration.name;
             this.surname = trainerRegistration.surname;
             this.emailAddress = trainerRegistration.emailAddress;
@@ -68,23 +83,11 @@ public class TrainerRegistration implements Comparable<TrainerRegistration> {
 
     @Override
     public String toString() {
-        return "RegistrationForm{" +
-                "name='" + name + '\'' +
+        return "TrainerRegistration{" +
+                "registrationId='" + registrationId + '\'' +
+                ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TrainerRegistration that = (TrainerRegistration) o;
-        return id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

@@ -2,10 +2,21 @@ package com.dean.domain;
 
 import com.dean.factory.TrainerUpdateDetailsFactory;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
-public class TrainerUpdateDetails implements Comparable<TrainerUpdateDetails> {
-    private String name,surname;
+@Entity
+@Table(name = "Trainer Update Details")
+public class TrainerUpdateDetails {
+    @Id
+    private String detailsId;
+    @Column(name = "Name")
+    private String name;
+    @Column(name = "Surname")
+    private String surname;
 
     private TrainerUpdateDetails(){}
 
@@ -13,18 +24,23 @@ public class TrainerUpdateDetails implements Comparable<TrainerUpdateDetails> {
         this.name=builder.name;
         this.surname=builder.surname;
     }
+
+    public String getDetailsId() {
+        return detailsId;
+    }
+
     public String getName(){return name;}
 
     public String getSurname(){return surname;}
 
-    @Override
-    public int compareTo(TrainerUpdateDetails o) {
-        return this.name.compareTo(o.name);
-    }
 
     public static class Builder{
-        private String name,surname;
+        private String name,surname,detailesId;
 
+        public Builder detailsId(String id){
+            this.detailesId=id;
+            return this;
+        }
         public Builder name(String name){
             this.name=name;
             return this;
@@ -45,22 +61,10 @@ public class TrainerUpdateDetails implements Comparable<TrainerUpdateDetails> {
 
     @Override
     public String toString() {
-        return "UpdateUserDetails{" +
+        return "TrainerUpdateDetails{" +
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
+                ", detailsId='" + detailsId + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TrainerUpdateDetails that = (TrainerUpdateDetails) o;
-        return name.equals(that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
     }
 }

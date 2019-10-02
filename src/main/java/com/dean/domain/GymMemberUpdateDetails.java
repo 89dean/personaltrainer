@@ -1,28 +1,45 @@
 package com.dean.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
-public class GymMemberUpdateDetails implements Comparable<GymMemberUpdateDetails> {
-    private String name,surname;
+@Entity
+@Table(name = "Member Update Details")
+public class GymMemberUpdateDetails  {
+    @Id
+    private String detailsId;
+    @Column(name="Name")
+    private String name;
+    @Column(name = "Surname")
+    private String surname;
 
     private GymMemberUpdateDetails(){}
 
     private GymMemberUpdateDetails(Builder builder){
+        this.detailsId=builder.detailsId;
         this.name=builder.name;
         this.surname=builder.surname;
     }
+
+    public String getDetailsId() {
+        return detailsId;
+    }
+
     public String getName(){return name;}
 
     public String getSurname(){return surname;}
 
-    @Override
-    public int compareTo(GymMemberUpdateDetails o) {
-        return this.name.compareTo(o.name);
-    }
 
     public static class Builder{
-        private String name,surname;
+        private String name,surname,detailsId;
 
+        public Builder detailsId(String id){
+            this.detailsId=id;
+            return this;
+        }
         public Builder name(String name){
             this.name=name;
             return this;
@@ -32,6 +49,7 @@ public class GymMemberUpdateDetails implements Comparable<GymMemberUpdateDetails
             return this;
         }
         public Builder Copy(GymMemberUpdateDetails gymMemberUpdateDetails){
+            this.detailsId = gymMemberUpdateDetails.detailsId;
             this.name = gymMemberUpdateDetails.name;
             this.surname = gymMemberUpdateDetails.surname;
 
@@ -43,22 +61,10 @@ public class GymMemberUpdateDetails implements Comparable<GymMemberUpdateDetails
 
     @Override
     public String toString() {
-        return "UpdateUserDetails{" +
+        return "GymMemberUpdateDetails{" +
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
+                ", detailsId='" + detailsId + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GymMemberUpdateDetails that = (GymMemberUpdateDetails) o;
-        return name.equals(that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
     }
 }

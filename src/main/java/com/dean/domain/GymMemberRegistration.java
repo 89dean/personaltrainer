@@ -1,9 +1,24 @@
 package com.dean.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
-public class GymMemberRegistration implements Comparable<GymMemberRegistration> {
-    private String name,surname,emailAddress,preferdSport,id;
+@Entity
+@Table(name = "Member Registration")
+public class GymMemberRegistration  {
+    @Id
+    private String id;
+    @Column(name = "Name")
+    private String name;
+    @Column(name = "Surname")
+    private String surname;
+    @Column(name = "Email")
+    private String emailAddress;
+    @Column(name ="Sport")
+    private String preferdSport;
 
     private GymMemberRegistration(){}
 
@@ -34,11 +49,6 @@ public class GymMemberRegistration implements Comparable<GymMemberRegistration> 
 
     public String getid(){return id;}
 
-    @Override
-    public int compareTo(GymMemberRegistration o) {
-
-        return this.emailAddress.compareTo(o.emailAddress);
-    }
 
     public static class Builder{
         private String name,surname,emailAddress,preferedSport,id;
@@ -87,18 +97,5 @@ public class GymMemberRegistration implements Comparable<GymMemberRegistration> 
                 ", preferdSport='" + preferdSport + '\'' +
                 ", id='" + id + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GymMemberRegistration that = (GymMemberRegistration) o;
-        return id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }
