@@ -7,13 +7,10 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Trainer Login")
 public class TrainerLogin {
     @Id
     private String loginId;
-    @Column(name = "Email")
     private String emailAddress;
-    @Column(name = "Password")
     private String password;
 
 
@@ -35,7 +32,9 @@ public class TrainerLogin {
     public String getPassword(){return password;}
 
     public static class Builder{
-        private String emailAddress,password,loginId;
+        private String loginId;
+        private String emailAddress;
+        private String password;
 
         public Builder loginId(String id){
             this.loginId=id;

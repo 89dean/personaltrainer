@@ -7,13 +7,10 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Coach Login")
-public class CoachLogin {
+public class CoachLogin implements Comparable<CoachLogin>{
     @Id
     private String loginId;
-    @Column(name = "Email")
     private String emailAddress;
-    @Column(name = "Password")
     private String password;
 
 
@@ -31,9 +28,37 @@ public class CoachLogin {
 
     public String getPassword(){return password;}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CoachLogin)) return false;
+        CoachLogin coachLogin = (CoachLogin) o;
+        return getLoginId().equals(coachLogin.getLoginId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getLoginId());
+    }
+
+    @Override
+    public String toString() {
+        return "CoachLogin{" +
+                "emailAddress='" + emailAddress + '\'' +
+                ", password='" + password + '\'' +
+                ", loginId='" + loginId + '\'' +
+                '}';
+    }
+    @Override
+    public int compareTo(CoachLogin coachLogin) {
+        return this.getLoginId().compareToIgnoreCase(coachLogin.loginId);
+    }
+
 
     public static class Builder{
-        private String emailAddress,password,loginId;
+        private String loginId;
+        private String emailAddress;
+        private String password;
 
         public Builder loginId(String loginId){
             this.loginId=loginId;
@@ -58,25 +83,6 @@ public class CoachLogin {
         {return new CoachLogin(this);}
     }
 
-    @Override
-    public String toString() {
-        return "CoachLogin{" +
-                "emailAddress='" + emailAddress + '\'' +
-                ", password='" + password + '\'' +
-                ", loginId='" + loginId + '\'' +
-                '}';
-    }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CoachLogin coachLogin = (CoachLogin) o;
-        return loginId.equals(coachLogin.loginId);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(loginId);
-    }
 
 }

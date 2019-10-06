@@ -7,13 +7,10 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Customer Update Details")
-public class CustomerUpdateDetails {
+public class CustomerUpdateDetails implements Comparable<CustomerUpdateDetails>{
     @Id
     private String detailsId;
-    @Column(name="Name")
     private String name;
-    @Column(name = "Surname")
     private String surname;
 
 
@@ -34,8 +31,40 @@ public class CustomerUpdateDetails {
     public String getSurname(){return surname;}
 
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CustomerUpdateDetails)) return false;
+        CustomerUpdateDetails customerUpdateDetails = (CustomerUpdateDetails) o;
+        return getDetailsId().equals(customerUpdateDetails.getDetailsId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getDetailsId());
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerUpdateDetails{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", detailsId='" + detailsId + '\'' +
+                '}';
+    }
+
+    @Override
+    public int compareTo(CustomerUpdateDetails customerUpdateDetails) {
+        return this.getDetailsId().compareToIgnoreCase(customerUpdateDetails.getDetailsId());
+    }
+
+
     public static class Builder{
-        private String name,surname,detailsId;
+        private String detailsId;
+        private String name;
+        private String surname;
+
 
         public Builder detailsId(String id){
             this.detailsId=id;
@@ -58,15 +87,6 @@ public class CustomerUpdateDetails {
         }
         public CustomerUpdateDetails build(){return new CustomerUpdateDetails(this);}
 
-    }
-
-    @Override
-    public String toString() {
-        return "CustomerUpdateDetails{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", detailsId='" + detailsId + '\'' +
-                '}';
     }
 
 }

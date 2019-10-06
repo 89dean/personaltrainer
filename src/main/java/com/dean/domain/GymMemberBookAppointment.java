@@ -7,17 +7,12 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Member Book Appointment")
 public class GymMemberBookAppointment{
     @Id
     private String appointmentId;
-    @Column(name = "Name")
     private String name;
-    @Column(name = "Surname")
     private String surname;
-    @Column(name = "Title")
     private String title;
-    @Column(name = "Time")
     private String time;
 
     private GymMemberBookAppointment(){}
@@ -43,7 +38,12 @@ public class GymMemberBookAppointment{
     public String getTime(){return time;}
 
     public static class Builder{
-        private String name,surname,title,time,appointmentId;
+        private String appointmentId;
+        private String name;
+        private String surname;
+        private String title;
+        private String time;
+
 
         public Builder appointmentId(String id){
             this.appointmentId=id;

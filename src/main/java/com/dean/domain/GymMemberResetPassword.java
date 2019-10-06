@@ -7,11 +7,9 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Member Reset Password")
 public class GymMemberResetPassword {
     @Id
     private String passwordId;
-    @Column(name = "Email")
     private String emailAddress;
 
     private GymMemberResetPassword(){}
@@ -25,7 +23,8 @@ public class GymMemberResetPassword {
 
 
     public static class Builder{
-        private String emailAddress,passwordId;
+        private String passwordId;
+        private String emailAddress;
 
         public Builder passwordId(String id){
             this.passwordId = id;

@@ -7,17 +7,12 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Coach Update Details")
-public class CustomerBookAppointment {
+public class CustomerBookAppointment implements Comparable<CustomerBookAppointment>{
     @Id
     private String appointmentId;
-    @Column(name = "Name")
     private String name;
-    @Column(name = "Surname")
     private String surname;
-    @Column(name = "Tile")
     private String title;
-    @Column(name = "Time")
     private String time;
 
     private CustomerBookAppointment(){}
@@ -39,9 +34,40 @@ public class CustomerBookAppointment {
 
     public String getTime(){return time;}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CustomerBookAppointment)) return false;
+        CustomerBookAppointment customerBookAppointment = (CustomerBookAppointment) o;
+        return getAppointmentId().equals(customerBookAppointment.getAppointmentId());
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getAppointmentId());
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerBookAppointment{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", title='" + title + '\'' +
+                ", time='" + time + '\'' +
+                ", appointmentId='" + appointmentId + '\'' +
+                '}';
+    }
+
+    @Override
+    public int compareTo(CustomerBookAppointment customerBookAppointment) {
+        return this.getAppointmentId().compareToIgnoreCase(customerBookAppointment.appointmentId);
+    }
     public static class Builder{
-        private String name,surname,title,time,appointmentId;
+        private String appointmentId;
+        private String name;
+        private String surname;
+        private String title;
+        private String time;
 
         public Builder appointmentId(String id){
             this.appointmentId=id;
@@ -73,16 +99,5 @@ public class CustomerBookAppointment {
         }
         public CustomerBookAppointment build(){return new CustomerBookAppointment(this);}
 
-    }
-
-    @Override
-    public String toString() {
-        return "CustomerBookAppointment{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", title='" + title + '\'' +
-                ", time='" + time + '\'' +
-                ", appointmentId='" + appointmentId + '\'' +
-                '}';
     }
 }

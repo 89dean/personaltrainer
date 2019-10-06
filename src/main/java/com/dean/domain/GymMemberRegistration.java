@@ -7,17 +7,12 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Member Registration")
 public class GymMemberRegistration  {
     @Id
     private String id;
-    @Column(name = "Name")
     private String name;
-    @Column(name = "Surname")
     private String surname;
-    @Column(name = "Email")
     private String emailAddress;
-    @Column(name ="Sport")
     private String preferdSport;
 
     private GymMemberRegistration(){}
@@ -26,7 +21,7 @@ public class GymMemberRegistration  {
         this.name = builder.name;
         this.surname = builder.surname;
         this.emailAddress = builder.emailAddress;
-        this.preferdSport = builder.preferedSport;
+        this.preferdSport = builder.preferdSport;
         this.id = builder.id;
 
     }
@@ -51,7 +46,12 @@ public class GymMemberRegistration  {
 
 
     public static class Builder{
-        private String name,surname,emailAddress,preferedSport,id;
+        private String id;
+        private String name;
+        private String surname;
+        private String emailAddress;
+        private String preferdSport;
+
 
         public Builder name(String name){
             this.name = name;
@@ -66,7 +66,7 @@ public class GymMemberRegistration  {
             return this;
         }
         public Builder preferedSport(String preferedSport){
-            this.preferedSport = preferedSport;
+            this.preferdSport = preferedSport;
             return this;
         }
         public Builder id(String id){
@@ -77,7 +77,7 @@ public class GymMemberRegistration  {
             this.name = gymMemberRegistration.name;
             this.surname = gymMemberRegistration.surname;
             this.emailAddress = gymMemberRegistration.emailAddress;
-            this.preferedSport = gymMemberRegistration.preferdSport;
+            this.preferdSport = gymMemberRegistration.preferdSport;
             this.id = gymMemberRegistration.id;
 
             return this;

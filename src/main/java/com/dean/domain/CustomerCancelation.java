@@ -8,15 +8,11 @@ import java.util.Objects;
 
 
 @Entity
-@Table(name = "Customer Cancelation")
-public class CustomerCancelation {
+public class CustomerCancelation implements Comparable<CustomerCancelation> {
     @Id
     private String cancelationId;
-    @Column(name = "Name")
     private String name;
-    @Column(name = "Surname")
     private String surname;
-    @Column(name = "Cancel")
     private String cancelMessage;
 
 
@@ -37,9 +33,41 @@ public class CustomerCancelation {
 
     public String getCancelMessage(){return cancelMessage;}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CustomerCancelation)) return false;
+        CustomerCancelation customerCancelation = (CustomerCancelation) o;
+        return getCancelationId().equals(customerCancelation.getCancelationId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCancelationId());
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerCancelation{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", cancelMessage='" + cancelMessage + '\'' +
+                ", cancelationId='" + cancelationId + '\'' +
+                '}';
+    }
+
+    @Override
+    public int compareTo(CustomerCancelation customerCancelation) {
+        return this.getCancelationId().compareToIgnoreCase(customerCancelation.cancelationId);
+    }
+
 
     public static class Builder {
-        private String name, surname, cancelMessage,cancelationId;
+        private String cancelationId;
+        private String name;
+        private String surname;
+        private String cancelMessage;
+
 
         public Builder cancelationId(String id) {
             this.cancelationId = id;
@@ -73,14 +101,6 @@ public class CustomerCancelation {
             }
     }
 
-    @Override
-    public String toString() {
-        return "CustomerCancelation{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", cancelMessage='" + cancelMessage + '\'' +
-                ", cancelationId='" + cancelationId + '\'' +
-                '}';
-    }
+
 
 }

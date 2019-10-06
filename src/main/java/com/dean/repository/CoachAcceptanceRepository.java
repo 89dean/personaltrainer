@@ -10,6 +10,5 @@ import java.util.Set;
 
 @Repository
 public interface CoachAcceptanceRepository extends JpaRepository<CoachAcceptance,String> {
-//    Collection<CoachAcceptance> getAll();
 
 }

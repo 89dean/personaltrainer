@@ -7,15 +7,11 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Member Cancelation")
 public class GymMemberCancelation {
     @Id
     private String cancelationId;
-    @Column(name = "Name")
     private String name;
-    @Column(name = "Surname")
     private String surname;
-    @Column(name = "Message")
     private String cancelMessage;
 
     private GymMemberCancelation(){}
@@ -40,7 +36,11 @@ public class GymMemberCancelation {
 
 
     public static class Builder{
-        private String name,surname,cancelMessage,cancelationId;
+        private String cancelationId;
+        private String name;
+        private String surname;
+        private String cancelMessage;
+
 
         public Builder cancelationId(String id){
             this.cancelationId=id;

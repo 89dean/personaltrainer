@@ -7,13 +7,10 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Coach Update Details")
-public class CoachUpdateDetails {
+public class CoachUpdateDetails implements Comparable<CoachUpdateDetails>{
     @Id
     private String detailsId;
-    @Column(name = "Name")
     private String name;
-    @Column(name = "Surname")
     private String surname;
 
     private CoachUpdateDetails(){}
@@ -29,8 +26,37 @@ public class CoachUpdateDetails {
 
     public String getSurname(){return surname;}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CoachUpdateDetails)) return false;
+        CoachUpdateDetails coachUpdateDetails = (CoachUpdateDetails) o;
+        return getDetailsId().equals(coachUpdateDetails.getDetailsId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getDetailsId());
+    }
+
+    @Override
+    public String toString() {
+        return "CoachUpdateDetails{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", detailsId='" + detailsId + '\'' +
+                '}';
+    }
+
+    @Override
+    public int compareTo(CoachUpdateDetails coachUpdateDetails) {
+        return this.getDetailsId().compareToIgnoreCase(coachUpdateDetails.detailsId);
+    }
+
         public static class Builder{
-        private String name,surname,detailsId;
+            private String detailsId;
+            private String name;
+            private String surname;
 
             public Builder detailsId(String id){
                 this.detailsId=id;
@@ -52,14 +78,5 @@ public class CoachUpdateDetails {
         }
         public CoachUpdateDetails build(){return new CoachUpdateDetails(this);}
 
-    }
-
-    @Override
-    public String toString() {
-        return "CoachUpdateDetails{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", detailsId='" + detailsId + '\'' +
-                '}';
     }
 }

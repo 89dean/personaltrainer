@@ -7,15 +7,11 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Coach Registration")
-public class CoachRegistration{
+public class CoachRegistration implements Comparable<CoachRegistration>{
     @Id
     private String registrationId;
-    @Column(name = "Name")
     private String name;
-    @Column(name= "Surname")
     private String surname;
-    @Column(name = "Email")
     private String emailAddress;
 
     private CoachRegistration(){}
@@ -41,9 +37,39 @@ public class CoachRegistration{
 
     public String getRegistrationId(){return registrationId;}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CoachRegistration)) return false;
+        CoachRegistration coachRegistration = (CoachRegistration) o;
+        return getRegistrationId().equals(coachRegistration.getRegistrationId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getRegistrationId());
+    }
+
+    @Override
+    public String toString() {
+        return "CoachRegistration{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", id='" + registrationId + '\'' +
+                '}';
+    }
+    @Override
+    public int compareTo(CoachRegistration coachRegistration) {
+        return this.getRegistrationId().compareToIgnoreCase(coachRegistration.registrationId);
+    }
+
 
     public static class Builder{
-        private String name,surname,emailAddress,registrationId;
+        private String registrationId;
+        private String name;
+        private String surname;
+        private String emailAddress;
 
         public Builder name(String name){
             this.name = name;
@@ -74,13 +100,5 @@ public class CoachRegistration{
         }
     }
 
-    @Override
-    public String toString() {
-        return "CoachRegistration{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", emailAddress='" + emailAddress + '\'' +
-                ", id='" + registrationId + '\'' +
-                '}';
-    }
+
 }

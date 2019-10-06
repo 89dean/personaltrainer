@@ -7,15 +7,11 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Trainer Registration")
 public class TrainerRegistration {
     @Id
     private String registrationId;
-    @Column(name = "Name")
     private String name;
-    @Column(name= "Surname")
     private String surname;
-    @Column(name = "Email")
     private String emailAddress;
 
     private TrainerRegistration(){}
@@ -49,7 +45,10 @@ public class TrainerRegistration {
 
 
     public static class Builder{
-        private String name,surname,emailAddress,registrationId;
+        private String registrationId;
+        private String name;
+        private String surname;
+        private String emailAddress;
 
         public Builder registrationId(String id){
             this.registrationId = id;

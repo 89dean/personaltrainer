@@ -7,11 +7,9 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Customer Reset Password")
-public class CustomerResetPassword {
+public class CustomerResetPassword implements Comparable<CustomerResetPassword> {
     @Id
     private String resetId;
-    @Column(name = "Email")
     private String emailAddress;
 
     private CustomerResetPassword(){}
@@ -23,8 +21,39 @@ public class CustomerResetPassword {
     }
     public String getEmailAddress(){return emailAddress;}
 
+    public String getResetId() {
+        return resetId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CustomerResetPassword)) return false;
+        CustomerResetPassword customerResetPassword = (CustomerResetPassword) o;
+        return getResetId().equals(customerResetPassword.getResetId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getResetId());
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerResetPassword{" +
+                "emailAddress='" + emailAddress + '\'' +
+                ", resetId='" + resetId + '\'' +
+                '}';
+    }
+
+    @Override
+    public int compareTo(CustomerResetPassword customerResetPassword) {
+        return this.getResetId().compareToIgnoreCase(customerResetPassword.resetId);
+    }
+
     public static class Builder{
-        private String emailAddress,resetId;
+        private String resetId;
+        private String emailAddress;
 
         public Builder resetId(String resetId){
             this.resetId = resetId;
@@ -45,11 +74,5 @@ public class CustomerResetPassword {
         }
     }
 
-    @Override
-    public String toString() {
-        return "CustomerResetPassword{" +
-                "emailAddress='" + emailAddress + '\'' +
-                ", resetId='" + resetId + '\'' +
-                '}';
-    }
+
 }

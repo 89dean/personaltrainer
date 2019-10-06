@@ -7,11 +7,9 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Coach Reset Password")
-public class CoachResetPassword {
+public class CoachResetPassword implements Comparable<CoachResetPassword>{
     @Id
     private String resetId;
-    @Column(name = "Email")
     private String emailAddress;
 
 
@@ -25,9 +23,34 @@ public class CoachResetPassword {
 
     public String getEmailAddress(){return emailAddress;}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CoachResetPassword)) return false;
+        CoachResetPassword coachResetPassword = (CoachResetPassword) o;
+        return getResetId().equals(coachResetPassword.getResetId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getResetId());
+    }
+    @Override
+    public String toString() {
+        return "CoachResetPassword{" +
+                "emailAddress='" + emailAddress + '\'' +
+                ", resetId='" + resetId + '\'' +
+                '}';
+    }
+    @Override
+    public int compareTo(CoachResetPassword coachResetPassword) {
+        return this.getResetId().compareToIgnoreCase(coachResetPassword.resetId);
+    }
 
     public static class Builder{
-        private String emailAddress,resetId;
+        @Id
+        private String resetId;
+        private String emailAddress;
 
         public Builder resetId(String id){
             this.resetId = id;
@@ -46,13 +69,5 @@ public class CoachResetPassword {
         public CoachResetPassword build(){
             return new CoachResetPassword(this);
         }
-    }
-
-    @Override
-    public String toString() {
-        return "CoachResetPassword{" +
-                "emailAddress='" + emailAddress + '\'' +
-                ", resetId='" + resetId + '\'' +
-                '}';
     }
 }

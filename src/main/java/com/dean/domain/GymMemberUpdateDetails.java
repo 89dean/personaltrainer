@@ -7,13 +7,10 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Member Update Details")
 public class GymMemberUpdateDetails  {
     @Id
     private String detailsId;
-    @Column(name="Name")
     private String name;
-    @Column(name = "Surname")
     private String surname;
 
     private GymMemberUpdateDetails(){}
@@ -34,7 +31,9 @@ public class GymMemberUpdateDetails  {
 
 
     public static class Builder{
-        private String name,surname,detailsId;
+        private String detailsId;
+        private String name;
+        private String surname;
 
         public Builder detailsId(String id){
             this.detailsId=id;

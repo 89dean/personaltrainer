@@ -6,17 +6,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
-@Table(name = "Coach Acceptance")
-public class CoachAcceptance {
+public class CoachAcceptance implements Comparable<CoachAcceptance>{
     @Id
     private String acceptanceId;
-    @Column(name = "Name")
     private String name;
-    @Column(name = "Surname")
     private String surname;
-    @Column(name = "Messgae")
     private String message;
 
     private CoachAcceptance() {
@@ -45,9 +42,37 @@ public class CoachAcceptance {
         return message;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CoachAcceptance)) return false;
+        CoachAcceptance coachAcceptance = (CoachAcceptance) o;
+        return getId().equals(coachAcceptance.getId());
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
+    @Override
+    public int compareTo(CoachAcceptance coachAcceptance) {
+        return this.getId().compareToIgnoreCase(coachAcceptance.getId());
+    }
+    @Override
+    public String toString() {
+        return "CoachAcceptance{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", message='" + message + '\'' +
+                ", acceptanceId='" + acceptanceId + '\'' +
+                '}';
+    }
+
     public static class Builder {
 
-        private String name, surname, message, acceptanceId;
+        private String acceptanceId;
+        private String name;
+        private String surname;
+        private String message;
 
         public Builder id(String acceptanceId) {
             this.acceptanceId = acceptanceId;
@@ -84,14 +109,6 @@ public class CoachAcceptance {
         }
     }
 
-    @Override
-    public String toString() {
-        return "CoachAcceptance{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", message='" + message + '\'' +
-                ", acceptanceId='" + acceptanceId + '\'' +
-                '}';
-    }
+
 }
 

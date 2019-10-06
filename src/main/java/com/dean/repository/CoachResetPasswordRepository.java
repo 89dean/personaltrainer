@@ -10,5 +10,4 @@ import java.util.Set;
 
 @Repository
 public interface CoachResetPasswordRepository extends JpaRepository<CoachResetPassword,String> {
-//    Collection<CoachResetPassword> getAll();
 }

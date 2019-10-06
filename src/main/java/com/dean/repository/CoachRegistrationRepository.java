@@ -10,6 +10,4 @@ import java.util.Set;
 
 @Repository
 public interface CoachRegistrationRepository extends JpaRepository<CoachRegistration,String> {
-//    Collection<CoachRegistration> getAll();
-//    CoachRegistration retrieveByDesc(String coachRegistration);
 }

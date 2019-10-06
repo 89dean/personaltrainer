@@ -9,13 +9,10 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Trainer Update Details")
 public class TrainerUpdateDetails {
     @Id
     private String detailsId;
-    @Column(name = "Name")
     private String name;
-    @Column(name = "Surname")
     private String surname;
 
     private TrainerUpdateDetails(){}
@@ -35,10 +32,12 @@ public class TrainerUpdateDetails {
 
 
     public static class Builder{
-        private String name,surname,detailesId;
+        private String detailsId;
+        private String name;
+        private String surname;
 
         public Builder detailsId(String id){
-            this.detailesId=id;
+            this.detailsId=id;
             return this;
         }
         public Builder name(String name){
