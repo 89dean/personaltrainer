@@ -4,7 +4,10 @@ import java.util.UUID;
 
 public class Misc {
 
-    public static String generateId(){
-        return UUID.randomUUID().toString();
+    public static int generateId(){
+        return Integer.parseInt(UUID.randomUUID().toString());
+
+//        return UUID.randomUUID().toString();
     }
+
 }

@@ -1,15 +1,19 @@
 package com.dean.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.dean.util.Misc;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class CoachLogin implements Comparable<CoachLogin>{
+@Table(name="login")
+public class CoachLogin {
     @Id
-    private String loginId;
+
+    @GeneratedValue
+    private int loginId;
+    private String name;
+    private String surname;
     private String emailAddress;
     private String password;
 
@@ -18,50 +22,56 @@ public class CoachLogin implements Comparable<CoachLogin>{
 
     private CoachLogin(Builder builder){
         this.loginId=builder.loginId;
+        this.name=builder.name;
+        this.surname=builder.surname;
         this.emailAddress=builder.emailAddress;
         this.password=builder.password;
 
     }
-    public String getLoginId(){return loginId;}
+    public int getLoginId(){return loginId;}
 
-    public String getEmailAddress(){return emailAddress;}
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
 
     public String getPassword(){return password;}
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CoachLogin)) return false;
-        CoachLogin coachLogin = (CoachLogin) o;
-        return getLoginId().equals(coachLogin.getLoginId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getLoginId());
-    }
-
-    @Override
     public String toString() {
         return "CoachLogin{" +
-                "emailAddress='" + emailAddress + '\'' +
+                "loginId=" + loginId +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
                 ", password='" + password + '\'' +
-                ", loginId='" + loginId + '\'' +
                 '}';
     }
-    @Override
-    public int compareTo(CoachLogin coachLogin) {
-        return this.getLoginId().compareToIgnoreCase(coachLogin.loginId);
-    }
-
 
     public static class Builder{
-        private String loginId;
+        private int loginId;
+        private String name;
+        private String surname;
         private String emailAddress;
         private String password;
 
-        public Builder loginId(String loginId){
+        public Builder loginId(int loginId){
             this.loginId=loginId;
+            return this;
+        }
+        public Builder name(String name){
+            this.name=name;
+            return this;
+        }
+        public Builder surname(String surname){
+            this.surname=surname;
             return this;
         }
 
@@ -74,6 +84,9 @@ public class CoachLogin implements Comparable<CoachLogin>{
             return this;
         }
         public Builder Copy(CoachLogin coachLogin){
+            this.loginId = coachLogin.loginId;
+            this.name = coachLogin.name;
+            this.surname = coachLogin.surname;
             this.emailAddress = coachLogin.emailAddress;
             this.password = coachLogin.password;
 
@@ -82,7 +95,5 @@ public class CoachLogin implements Comparable<CoachLogin>{
         public CoachLogin build()
         {return new CoachLogin(this);}
     }
-
-
 
 }

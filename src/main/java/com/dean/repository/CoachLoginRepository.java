@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface CoachLoginRepository extends JpaRepository<CoachLogin,String> {
+public interface CoachLoginRepository extends JpaRepository<CoachLogin,Integer> {
+
 }

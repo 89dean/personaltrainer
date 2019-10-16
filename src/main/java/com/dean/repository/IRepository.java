@@ -1,7 +1,5 @@
 package com.dean.repository;
 
-import com.dean.domain.CoachAcceptance;
-
 public interface IRepository<T,ID> {
     T create(T t);
     T update(T t);
